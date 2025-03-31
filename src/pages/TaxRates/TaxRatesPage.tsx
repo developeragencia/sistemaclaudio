@@ -1,323 +1,223 @@
-
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { toast } from 'sonner';
-import { Loader2, Plus, Save, Trash2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-const formSchema = z.object({
-  activity_code: z.string().min(1, 'Código de atividade é obrigatório'),
-  retention_rate: z.number()
-    .min(0, 'Taxa deve ser no mínimo 0%')
-    .max(100, 'Taxa deve ser no máximo 100%'),
-  description: z.string().optional(),
-});
+interface TaxRate {
+  id: string;
+  activity_code: string;
+  retention_rate: number;
+  description: string;
+  created_at?: string;
+}
 
-const TaxRatesPage = () => {
-  const [taxRates, setTaxRates] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+interface TaxRatesPageProps {
+  supabase: SupabaseClient;
+}
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      activity_code: '',
-      retention_rate: 0,
-      description: '',
-    },
+const TaxRatesPage: React.FC<TaxRatesPageProps> = ({ supabase }) => {
+  const [taxRates, setTaxRates] = useState<TaxRate[]>([]);
+  const [newTaxRate, setNewTaxRate] = useState({
+    activity_code: '',
+    retention_rate: undefined,
+    description: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch tax rates on component mount
   useEffect(() => {
     fetchTaxRates();
   }, []);
 
   const fetchTaxRates = async () => {
-    setLoading(true);
-    
+    setIsLoading(true);
     try {
       const { data, error } = await supabase
         .from('tax_rates')
         .select('*')
-        .order('activity_code');
-        
+        .order('created_at', { ascending: false });
+
       if (error) {
         throw error;
       }
-      
+
       setTaxRates(data || []);
     } catch (error) {
-      console.error('Error fetching tax rates:', error);
-      toast.error('Falha ao carregar taxas de retenção');
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao buscar taxas",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+      });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleEditTaxRate = (taxRate: any) => {
-    form.reset({
-      activity_code: taxRate.activity_code,
-      retention_rate: taxRate.retention_rate,
-      description: taxRate.description || '',
-    });
-    setEditingId(taxRate.id);
-    setDialogOpen(true);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewTaxRate(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const handleAddNew = () => {
-    form.reset({
-      activity_code: '',
-      retention_rate: 0,
-      description: '',
-    });
-    setEditingId(null);
-    setDialogOpen(true);
-  };
-
-  const handleDeleteTaxRate = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta alíquota?')) {
+  // Fix the TypeScript error for the tax rate insert by ensuring required fields
+  const handleAddTaxRate = async () => {
+    if (!newTaxRate.activity_code || !newTaxRate.retention_rate) {
+      toast({
+        variant: "destructive",
+        title: "Campos obrigatórios",
+        description: "Preencha o código de atividade e a taxa de retenção",
+      });
       return;
     }
-    
+
+    setIsSubmitting(true);
     try {
+      // Fix: Convert newTaxRate to have all required fields
+      const taxRateToSubmit = {
+        activity_code: newTaxRate.activity_code,
+        retention_rate: Number(newTaxRate.retention_rate),
+        description: newTaxRate.description || ""
+      };
+
       const { error } = await supabase
         .from('tax_rates')
-        .delete()
-        .eq('id', id);
-        
+        .insert(taxRateToSubmit);
+
       if (error) {
         throw error;
       }
-      
-      toast.success('Alíquota excluída com sucesso');
-      fetchTaxRates();
-    } catch (error) {
-      console.error('Error deleting tax rate:', error);
-      toast.error('Falha ao excluir alíquota');
-    }
-  };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      if (editingId) {
-        // Update existing tax rate
-        const { error } = await supabase
-          .from('tax_rates')
-          .update(values)
-          .eq('id', editingId);
-          
-        if (error) {
-          throw error;
-        }
-        
-        toast.success('Alíquota atualizada com sucesso');
-      } else {
-        // Create new tax rate
-        const { error } = await supabase
-          .from('tax_rates')
-          .insert(values);
-          
-        if (error) {
-          throw error;
-        }
-        
-        toast.success('Alíquota criada com sucesso');
-      }
-      
-      setDialogOpen(false);
+      toast({
+        title: "Taxa adicionada",
+        description: "A taxa de retenção foi adicionada com sucesso",
+      });
+
+      setNewTaxRate({
+        activity_code: '',
+        retention_rate: undefined,
+        description: ''
+      });
       fetchTaxRates();
     } catch (error) {
-      console.error('Error saving tax rate:', error);
-      toast.error('Falha ao salvar alíquota');
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao adicionar taxa",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Alíquotas de Retenção</h1>
-        <p className="text-muted-foreground">
-          Gerencie as alíquotas de retenção fiscal para diferentes códigos de atividade
-        </p>
-      </div>
-
-      <Separator />
-
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Alíquotas Cadastradas</h2>
-        <div className="flex space-x-2">
-          <Button
-            onClick={fetchTaxRates}
-            variant="outline"
-            size="sm"
-          >
-            Atualizar
-          </Button>
-          <Button
-            onClick={handleAddNew}
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Nova Alíquota
-          </Button>
-        </div>
-      </div>
-
+    <div className="container mx-auto py-8">
       <Card>
-        <CardContent className="p-0">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <CardHeader>
+          <CardTitle>Taxas de Retenção</CardTitle>
+          <CardDescription>Gerencie as taxas de retenção de impostos.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="activity_code">Código de Atividade</Label>
+                <Input
+                  type="text"
+                  id="activity_code"
+                  name="activity_code"
+                  value={newTaxRate.activity_code}
+                  onChange={handleInputChange}
+                  placeholder="Ex: 4120-4/00"
+                />
+              </div>
+              <div>
+                <Label htmlFor="retention_rate">Taxa de Retenção (%)</Label>
+                <Input
+                  type="number"
+                  id="retention_rate"
+                  name="retention_rate"
+                  value={newTaxRate.retention_rate || ''}
+                  onChange={handleInputChange}
+                  placeholder="Ex: 1.5"
+                />
+              </div>
             </div>
-          ) : taxRates.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Código de Atividade</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead className="text-right">Alíquota</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {taxRates.map((taxRate) => (
-                  <TableRow key={taxRate.id}>
-                    <TableCell className="font-medium">{taxRate.activity_code}</TableCell>
-                    <TableCell>{taxRate.description || '-'}</TableCell>
-                    <TableCell className="text-right">{taxRate.retention_rate}%</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          onClick={() => handleEditTaxRate(taxRate)}
-                          variant="ghost"
-                          size="sm"
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          onClick={() => handleDeleteTaxRate(taxRate.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="flex flex-col justify-center items-center h-64 text-muted-foreground">
-              <p>Nenhuma alíquota cadastrada</p>
-              <Button
-                onClick={handleAddNew}
-                variant="outline"
-                className="mt-4"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar Alíquota
-              </Button>
+            <div>
+              <Label htmlFor="description">Descrição</Label>
+              <Input
+                type="text"
+                id="description"
+                name="description"
+                value={newTaxRate.description}
+                onChange={handleInputChange}
+                placeholder="Ex: Construção de edifícios"
+              />
             </div>
-          )}
+            <Button onClick={handleAddTaxRate} disabled={isSubmitting}>
+              {isSubmitting ? 'Adicionando...' : 'Adicionar Taxa'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingId ? 'Editar Alíquota' : 'Nova Alíquota'}</DialogTitle>
-            <DialogDescription>
-              {editingId 
-                ? 'Atualize os dados da alíquota de retenção'
-                : 'Preencha os dados para criar uma nova alíquota de retenção'}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="activity_code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Código de Atividade</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: 6201-5/01" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Código CNAE da atividade econômica
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+      <Card className="mt-4">
+        <CardHeader>
+          <CardTitle>Taxas Cadastradas</CardTitle>
+          <CardDescription>Lista de taxas de retenção cadastradas no sistema.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Código</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Taxa (%)</TableHead>
+                  <TableHead className="text-right">Criado em</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center">Carregando...</TableCell>
+                  </TableRow>
+                ) : taxRates.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center">Nenhuma taxa cadastrada.</TableCell>
+                  </TableRow>
+                ) : (
+                  taxRates.map((taxRate) => (
+                    <TableRow key={taxRate.id}>
+                      <TableCell className="font-medium">{taxRate.activity_code}</TableCell>
+                      <TableCell>{taxRate.description}</TableCell>
+                      <TableCell>{taxRate.retention_rate}</TableCell>
+                      <TableCell className="text-right">{taxRate.created_at}</TableCell>
+                    </TableRow>
+                  ))
                 )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="retention_rate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alíquota de Retenção (%)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.01"
-                        min="0"
-                        max="100"
-                        {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Percentual de retenção fiscal a ser aplicado
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descrição</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Descrição da atividade" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Descrição opcional para identificação da atividade
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">Cancelar</Button>
-                </DialogClose>
-                <Button type="submit">
-                  <Save className="h-4 w-4 mr-2" />
-                  Salvar
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </CardContent>
+      </Card>
     </div>
   );
 };
