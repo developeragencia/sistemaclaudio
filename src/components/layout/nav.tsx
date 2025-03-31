@@ -1,59 +1,56 @@
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Calculator, CreditCard, Home, Settings } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { buttonVariants } from "@/components/ui/button";
 
-interface NavProps extends React.HTMLAttributes<HTMLElement> {
-  isCollapsed: boolean;
-}
+interface NavProps extends React.HTMLAttributes<HTMLElement> {}
 
-export function Nav({ className, isCollapsed, ...props }: NavProps) {
+export function Nav({ className, ...props }: NavProps) {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const routes = [
     {
       href: "/app/home",
-      label: "Dashboard",
-      icon: Home,
+      label: "Home",
     },
     {
       href: "/app/tax-credits",
-      label: "Créditos",
-      icon: CreditCard,
+      label: "Créditos Tributários",
     },
     {
       href: "/app/tax-rules",
-      label: "Regras",
-      icon: Settings,
+      label: "Regras Tributárias",
     },
     {
       href: "/app/calculator/advanced",
-      label: "Calculadora",
-      icon: Calculator,
+      label: "Calculadora Avançada",
+    },
+    {
+      href: "/app/calculator/simple",
+      label: "Calculadora Simples",
     },
   ];
 
   return (
-    <nav className={cn("flex flex-col gap-4", className)} {...props}>
-      {routes.map((route) => {
-        const Icon = route.icon;
-        const isActive = location.pathname === route.href;
-
-        return (
-          <button
-            key={route.href}
-            onClick={() => navigate(route.href)}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
-              isCollapsed ? "justify-center" : "",
-              isActive ? "bg-gray-100 text-gray-900" : "hover:bg-gray-100"
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {!isCollapsed && <span>{route.label}</span>}
-          </button>
-        );
-      })}
+    <nav
+      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      {...props}
+    >
+      {routes.map((route) => (
+        <Link
+          key={route.href}
+          to={route.href}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            location.pathname === route.href ||
+            (route.href !== "/app/home" && location.pathname.startsWith(route.href))
+              ? "bg-muted hover:bg-muted"
+              : "hover:bg-transparent hover:underline",
+            "justify-start"
+          )}
+        >
+          {route.label}
+        </Link>
+      ))}
     </nav>
   );
 } 

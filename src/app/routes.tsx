@@ -1,4 +1,3 @@
-
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import LandingPage from "@/pages/LandingPage";
