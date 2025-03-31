@@ -55,6 +55,8 @@ import { useAuth, Client } from '@/contexts/AuthContext';
 import { Separator } from '@/components/ui/separator';
 import { Card } from '@/components/ui/card';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from '@/components/Logo';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -64,6 +66,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { user, logout, activeClient, clients, setActiveClient } = useAuth();
   const location = useLocation();
   const [clientDropdownOpen, setClientDropdownOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const getInitials = (name: string) => {
     return name
@@ -86,12 +89,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <Sidebar className="bg-taxglider-blue-700">
+        <Sidebar className="bg-sidebar">
           <SidebarHeader className="p-4">
             <div className="flex items-center justify-center">
-              <h1 className="text-2xl font-bold text-white tracking-tight">
-                Tax<span className="text-taxglider-green-400">Glider</span>
-              </h1>
+              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} />
             </div>
           </SidebarHeader>
 

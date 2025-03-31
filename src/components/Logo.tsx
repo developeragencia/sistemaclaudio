@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LogoProps {
   animated?: boolean;
@@ -14,6 +15,13 @@ const Logo: React.FC<LogoProps> = ({
   withSubtitle = true,
   className = '' 
 }) => {
+  const isMobile = useIsMobile();
+  
+  // Use specific animation classes based on device type
+  const animationClasses = animated 
+    ? isMobile ? 'animate-fade-in' : 'animate-float' 
+    : '';
+
   const sizeClasses = {
     sm: 'h-8',
     md: 'h-12',
@@ -35,15 +43,13 @@ const Logo: React.FC<LogoProps> = ({
     xl: 'text-base'
   };
 
-  const animationClasses = animated ? 'animate-float' : '';
-
   return (
     <div className={`flex items-center ${className}`}>
       <div className={`logo-container ${animationClasses}`}>
         <img 
           src="/lovable-uploads/b5ab68a5-181d-4e3b-b687-86db1d8e229c.png" 
           alt="Cláudio Figueiredo Logo" 
-          className={`${sizeClasses[size]} ${animated ? 'animate-pulse' : ''}`}
+          className={`${sizeClasses[size]} ${animated && !isMobile ? 'animate-pulse' : ''}`}
         />
       </div>
       <div className="ml-3 flex flex-col">
