@@ -128,6 +128,13 @@ const Login = () => {
           <p className="text-xs mt-2 text-gray-600">Senha: password</p>
         </div>
       </div>
+
+      <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
+        <div>© {new Date().getFullYear()} Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
+        <div className="mt-1">
+          Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
+        </div>
+      </footer>
     </div>
   );
 };
