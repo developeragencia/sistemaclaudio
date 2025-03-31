@@ -1,167 +1,188 @@
-
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { CNPJResponse } from '@/types/audit';
+import { cnpjService } from '@/services/cnpjService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { toast } from 'sonner';
-import { Search, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/components/ui/use-toast';
+import { Loader2, Search } from 'lucide-react';
 
-const CNPJIntegration = () => {
+export default function CNPJIntegration() {
+  const { toast } = useToast();
   const [cnpj, setCnpj] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<CNPJResponse | null>(null);
 
-  const handleCnpjLookup = async () => {
-    if (!cnpj.trim()) {
-      toast.error('Por favor, informe um CNPJ válido');
+  const searchMutation = useMutation({
+    mutationFn: (cnpj: string) => cnpjService.fetchCNPJData(cnpj),
+    onSuccess: (data) => {
+      setResult(data);
+      toast({
+        title: 'CNPJ encontrado',
+        description: 'Os dados do CNPJ foram carregados com sucesso.',
+      });
+    },
+    onError: (error) => {
+      setResult(null);
+      toast({
+        title: 'Erro na consulta',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!cnpj) {
+      toast({
+        title: 'CNPJ obrigatório',
+        description: 'Por favor, informe um CNPJ para consulta.',
+        variant: 'destructive',
+      });
       return;
     }
-
-    setLoading(true);
-    
-    try {
-      const { data, error } = await supabase.functions.invoke('cnpj-lookup', {
-        body: { cnpj: cnpj.trim() }
-      });
-
-      if (error) {
-        console.error('Error calling CNPJ lookup function:', error);
-        toast.error('Falha ao consultar CNPJ: ' + error.message);
-        return;
-      }
-
-      setResult(data);
-      
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        toast.success(data.message || 'Consulta realizada com sucesso');
-      }
-    } catch (error) {
-      console.error('Exception during CNPJ lookup:', error);
-      toast.error('Erro ao processar a consulta');
-    } finally {
-      setLoading(false);
-    }
+    searchMutation.mutate(cnpj);
   };
 
-  const formatCnpj = (value: string) => {
-    // Remove any non-digit characters
+  const formatCNPJ = (value: string) => {
     const digits = value.replace(/\D/g, '');
-    
-    // Apply CNPJ mask (XX.XXX.XXX/XXXX-XX)
-    if (digits.length <= 2) {
-      return digits;
-    } else if (digits.length <= 5) {
-      return `${digits.slice(0, 2)}.${digits.slice(2)}`;
-    } else if (digits.length <= 8) {
-      return `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5)}`;
-    } else if (digits.length <= 12) {
-      return `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5, 8)}/${digits.slice(8)}`;
-    } else {
-      return `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5, 8)}/${digits.slice(8, 12)}-${digits.slice(12, 14)}`;
-    }
+    return digits.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+      '$1.$2.$3/$4-$5'
+    );
   };
 
-  const handleCnpjChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatCnpj(e.target.value);
-    setCnpj(formattedValue);
+  const handleCNPJChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (value.length <= 14) {
+      setCnpj(value);
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Integração CNPJ.ws</h1>
-        <p className="text-muted-foreground">
-          Consulte e importe dados de fornecedores através do CNPJ
-        </p>
-      </div>
+    <div className="container mx-auto py-6 space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Consulta de CNPJ</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSearch} className="flex gap-4 mb-6">
+            <Input
+              placeholder="Digite o CNPJ"
+              value={formatCNPJ(cnpj)}
+              onChange={handleCNPJChange}
+              maxLength={18}
+              className="max-w-sm"
+            />
+            <Button
+              type="submit"
+              disabled={searchMutation.isPending || cnpj.length !== 14}
+            >
+              {searchMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Search className="mr-2 h-4 w-4" />
+              )}
+              Consultar
+            </Button>
+          </form>
 
-      <Separator />
+          {result && (
+            <div className="space-y-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <h3 className="font-semibold mb-2">Dados Principais</h3>
+                  <dl className="space-y-2">
+                    <div>
+                      <dt className="text-sm text-muted-foreground">CNPJ</dt>
+                      <dd>{formatCNPJ(result.cnpj)}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Razão Social</dt>
+                      <dd>{result.razao_social}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Nome Fantasia</dt>
+                      <dd>{result.nome_fantasia || '-'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Natureza Jurídica</dt>
+                      <dd>{result.natureza_juridica}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Porte</dt>
+                      <dd>{result.porte}</dd>
+                    </div>
+                  </dl>
+                </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Consulta de CNPJ</CardTitle>
-            <CardDescription>
-              Informe o CNPJ para consultar informações do fornecedor
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex space-x-2">
-              <Input
-                placeholder="XX.XXX.XXX/XXXX-XX"
-                value={cnpj}
-                onChange={handleCnpjChange}
-                maxLength={18}
-              />
-              <Button 
-                onClick={handleCnpjLookup} 
-                disabled={loading || !cnpj.trim()}
-              >
-                {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                ) : (
-                  <Search className="h-4 w-4 mr-2" />
-                )}
-                Consultar
-              </Button>
+                <div>
+                  <h3 className="font-semibold mb-2">Endereço</h3>
+                  <dl className="space-y-2">
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Logradouro</dt>
+                      <dd>
+                        {result.endereco.logradouro}, {result.endereco.numero}
+                        {result.endereco.complemento
+                          ? ` - ${result.endereco.complemento}`
+                          : ''}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Bairro</dt>
+                      <dd>{result.endereco.bairro}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Cidade/UF</dt>
+                      <dd>
+                        {result.endereco.municipio}/{result.endereco.uf}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">CEP</dt>
+                      <dd>{result.endereco.cep}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Atividades</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm text-muted-foreground mb-1">
+                      Atividade Principal
+                    </h4>
+                    <ul className="list-disc list-inside">
+                      {result.atividade_principal.map((atividade, index) => (
+                        <li key={index}>
+                          {atividade.code} - {atividade.text}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {result.atividades_secundarias.length > 0 && (
+                    <div>
+                      <h4 className="text-sm text-muted-foreground mb-1">
+                        Atividades Secundárias
+                      </h4>
+                      <ul className="list-disc list-inside">
+                        {result.atividades_secundarias.map((atividade, index) => (
+                          <li key={index}>
+                            {atividade.code} - {atividade.text}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Resultado da Consulta</CardTitle>
-            <CardDescription>
-              Informações do fornecedor consultado
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="flex justify-center items-center h-40">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : result?.supplier ? (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium">Razão Social</p>
-                  <p className="text-lg">{result.supplier.company_name}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Nome Fantasia</p>
-                  <p>{result.supplier.trade_name || '-'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">CNPJ</p>
-                  <p>{result.supplier.cnpj}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Atividade Principal</p>
-                  <p>{result.supplier.activity_code} - {result.supplier.activity_description || '-'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Regime Tributário</p>
-                  <p>{result.supplier.tax_regime || '-'}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-center items-center h-40 text-muted-foreground">
-                <p>Nenhum resultado para exibir</p>
-              </div>
-            )}
-          </CardContent>
-          {result?.supplier && (
-            <CardFooter>
-              <p className="text-xs text-muted-foreground">{result.message}</p>
-            </CardFooter>
           )}
-        </Card>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-export default CNPJIntegration;
+}
