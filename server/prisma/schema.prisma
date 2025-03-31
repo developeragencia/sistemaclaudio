@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Supplier {
+  id                String        @id @default(cuid())
+  cnpj              String        @unique
+  name              String
+  activity_code     String?
+  activity_type     String?
+  tax_regime        String?
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  payments          Payment[]
+  audit_results     AuditResult[]
+
+  @@map("suppliers")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  supplier_id     String
+  amount          Float
+  payment_date    DateTime
+  description     String?
+  status          String        @default("pending")
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  supplier        Supplier      @relation(fields: [supplier_id], references: [id])
+  audit_results   AuditResult[]
+
+  @@map("payments")
+}
+
+model TaxRate {
+  id                  String    @id @default(cuid())
+  activity_code       String    @unique
+  activity_description String
+  tax_rate            Float
+  tax_type            String
+  minimum_value       Float     @default(0)
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  @@map("tax_rates")
+}
+
+model AuditResult {
+  id              String    @id @default(cuid())
+  supplier_id     String
+  payment_id      String
+  tax_amount      Float
+  tax_type        String
+  status          String    @default("pending")
+  notes           String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  supplier        Supplier  @relation(fields: [supplier_id], references: [id])
+  payment         Payment   @relation(fields: [payment_id], references: [id])
+
+  @@map("audit_results")
+} 
