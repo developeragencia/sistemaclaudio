@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import Logo from '@/components/Logo';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ const Login = () => {
       if (success) {
         toast({
           title: "Login realizado com sucesso",
-          description: "Bem-vindo ao TaxGlider",
+          description: "Bem-vindo ao Sistema Cláudio Figueiredo",
         });
         navigate('/');
       } else {
@@ -48,19 +49,21 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-gradient-to-br from-taxglider-blue-700 to-taxglider-blue-900">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-gradient-to-br from-figueiredo-gray-900 to-figueiredo-gray-800 bg-geometric">
+      <div className="grid-pattern"></div>
+      
+      <div className="w-full max-w-md animate-fade-in">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
-            Tax<span className="text-taxglider-green-400">Glider</span>
-          </h1>
-          <p className="text-taxglider-blue-100">Sistema para Recuperação de Créditos Tributários</p>
+          <Logo animated size="lg" className="mx-auto" />
+          <p className="text-figueiredo-gray-300 mt-4 animate-fade-in animate-delay-2">
+            Sistema para Recuperação de Créditos Tributários
+          </p>
         </div>
 
-        <Card className="w-full">
+        <Card className="w-full backdrop-blur-sm bg-white/90 animate-fade-in animate-delay-1 shadow-xl border-white/20">
           <CardHeader>
-            <CardTitle>Acesse sua conta</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-center">Acesse sua conta</CardTitle>
+            <CardDescription className="text-center">
               Entre com suas credenciais para acessar o sistema
             </CardDescription>
           </CardHeader>
@@ -75,12 +78,13 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="transition-all duration-300 focus:ring-2 focus:ring-figueiredo-gray-500"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Senha</Label>
-                  <a href="#" className="text-sm text-primary hover:underline">
+                  <a href="#" className="text-sm text-primary hover:underline transition-colors">
                     Esqueceu a senha?
                   </a>
                 </div>
@@ -91,22 +95,27 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="transition-all duration-300 focus:ring-2 focus:ring-figueiredo-gray-500"
                 />
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                className="w-full bg-gradient-to-r from-figueiredo-gray-800 to-figueiredo-gray-700 hover:from-figueiredo-gray-700 hover:to-figueiredo-gray-600 transition-all duration-300 transform hover:scale-[1.02]" 
+                disabled={isLoading}
+              >
                 {isLoading ? "Entrando..." : "Entrar"}
               </Button>
             </CardFooter>
           </form>
         </Card>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-taxglider-blue-100">
+        <div className="mt-6 text-center animate-fade-in animate-delay-3">
+          <p className="text-sm text-figueiredo-gray-300">
             Para acesso de teste, use:
           </p>
-          <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-taxglider-blue-200">
+          <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-figueiredo-gray-300">
             <div>
               <p>Admin: admin@example.com</p>
               <p>Escritório: office@example.com</p>
@@ -116,7 +125,7 @@ const Login = () => {
               <p>Representante: rep@example.com</p>
             </div>
           </div>
-          <p className="text-xs mt-2 text-taxglider-blue-200">Senha: password</p>
+          <p className="text-xs mt-2 text-figueiredo-gray-300">Senha: password</p>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Clients from "./pages/Clients";
@@ -46,7 +47,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
@@ -69,11 +70,14 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Landing Page */}
+            <Route path="/" element={<LandingPage />} />
+            
             {/* Rotas públicas */}
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             
             {/* Rotas protegidas */}
-            <Route path="/" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+            <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
             <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
             <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
             

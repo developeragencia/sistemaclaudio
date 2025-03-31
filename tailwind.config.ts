@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				montserrat: ['Montserrat', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -89,6 +92,19 @@ export default {
 						900: '#05360c',
 					},
 				},
+				figueiredo: {
+					gray: {
+						100: '#f5f5f5',
+						200: '#e5e5e5',
+						300: '#d4d4d4',
+						400: '#a3a3a3',
+						500: '#737373',
+						600: '#525252',
+						700: '#404040',
+						800: '#262626',
+						900: '#171717',
+					},
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -122,11 +138,29 @@ export default {
 						transform: "translateY(0)"
 					}
 				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0px)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'spin-slow': {
+					'0%': {
+						transform: 'rotate(0deg)'
+					},
+					'100%': {
+						transform: 'rotate(360deg)'
+					}
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
+				'float': 'float 6s ease-in-out infinite',
+				'spin-slow': 'spin-slow 30s linear infinite'
 			}
 		}
 	},

@@ -91,7 +91,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-montserrat;
   }
 }
 
@@ -106,5 +106,167 @@
 
   .card-hover {
     @apply transition-all duration-200 hover:shadow-md hover:scale-[1.01];
+  }
+  
+  /* Logo Animation Classes */
+  .logo-container {
+    @apply relative;
+  }
+  
+  .logo-image {
+    @apply transition-all duration-500;
+  }
+  
+  .logo-text {
+    @apply font-bold tracking-tight;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo-subtitle {
+    @apply text-gray-400 font-light uppercase tracking-wider;
+  }
+  
+  /* Animated Gradient Buttons */
+  .gradient-button {
+    @apply relative overflow-hidden text-white font-semibold py-3 px-6 rounded-md shadow-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl;
+    background: linear-gradient(90deg, #333333, #555555, #333333);
+    background-size: 200% 100%;
+    animation: gradientShift 8s ease infinite;
+  }
+  
+  /* Landing Page Classes */
+  .hero-container {
+    @apply min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-gray-900 to-black;
+  }
+  
+  .hero-content {
+    @apply z-10 text-center px-6 max-w-4xl mx-auto;
+  }
+  
+  .hero-title {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight;
+    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .hero-subtitle {
+    @apply text-lg md:text-xl text-gray-300 mb-10;
+  }
+  
+  .hero-cta {
+    @apply inline-block;
+  }
+  
+  /* Animations */
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes logoSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Animation Classes */
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse {
+    animation: pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-delay-1 {
+    animation-delay: 0.2s;
+  }
+  
+  .animate-delay-2 {
+    animation-delay: 0.4s;
+  }
+  
+  .animate-delay-3 {
+    animation-delay: 0.6s;
+  }
+  
+  .animate-delay-4 {
+    animation-delay: 0.8s;
+  }
+  
+  .animate-spin-slow {
+    animation: logoSpin 30s linear infinite;
+  }
+  
+  .bg-geometric {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  
+  .grid-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+  }
+}
+
+/* Font Settings */
+@layer base {
+  html {
+    font-family: 'Montserrat', system-ui, sans-serif;
   }
 }
