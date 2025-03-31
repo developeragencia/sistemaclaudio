@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -10,6 +11,7 @@ import { Sidebar } from '@/components/ui/sidebar';
 import { Button } from "@/components/ui/button";
 import { Menu, User } from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -46,7 +48,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       >
         <div className="flex h-14 items-center justify-between">
           {!isCollapsed && (
-            <Link to="/app/home" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <span className="font-bold">Sistema Tributário</span>
             </Link>
           )}
@@ -63,6 +65,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       <div className="flex flex-1 flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-gray-50/40 px-6">
           <div className="ml-auto flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+              Voltar para Home
+            </Button>
             <div className="flex items-center gap-2">
               <User className="h-4 w-4" />
               <span className="text-sm">{user?.name}</span>
