@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
   return (
-    <div className="hero-container">
+    <div className="hero-container bg-white text-gray-800">
       <div className="grid-pattern"></div>
       
       <div className="hero-content">
@@ -14,11 +14,11 @@ const LandingPage = () => {
           <Logo animated size="xl" className="mx-auto" />
         </div>
         
-        <h1 className="hero-title animate-fade-in animate-delay-1">
+        <h1 className="hero-title text-gray-800 animate-fade-in animate-delay-1">
           Sistema de Recuperação de Créditos Tributários
         </h1>
         
-        <p className="hero-subtitle animate-fade-in animate-delay-2">
+        <p className="hero-subtitle text-gray-600 animate-fade-in animate-delay-2">
           Solução automatizada para apuração e recuperação de créditos tributários de IRRF/PJ,
           garantindo conformidade com a legislação vigente e otimizando processos de auditoria fiscal.
         </p>
@@ -31,24 +31,24 @@ const LandingPage = () => {
         </div>
         
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in animate-delay-4">
-          <div className="p-6 bg-white/5 backdrop-blur rounded-lg border border-white/10 transition-all hover:bg-white/10 hover:scale-105">
-            <h3 className="text-lg font-semibold text-white mb-2">Controle Inteligente</h3>
-            <p className="text-gray-300 text-sm">Gestão completa de processos e clientes com interface intuitiva.</p>
+          <div className="p-6 bg-gray-50 backdrop-blur rounded-lg border border-gray-200 transition-all hover:bg-gray-100 hover:scale-105">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Controle Inteligente</h3>
+            <p className="text-gray-600 text-sm">Gestão completa de processos e clientes com interface intuitiva.</p>
           </div>
           
-          <div className="p-6 bg-white/5 backdrop-blur rounded-lg border border-white/10 transition-all hover:bg-white/10 hover:scale-105">
-            <h3 className="text-lg font-semibold text-white mb-2">Automação Fiscal</h3>
-            <p className="text-gray-300 text-sm">Identificação automática de créditos recuperáveis de IRRF/PJ.</p>
+          <div className="p-6 bg-gray-50 backdrop-blur rounded-lg border border-gray-200 transition-all hover:bg-gray-100 hover:scale-105">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Automação Fiscal</h3>
+            <p className="text-gray-600 text-sm">Identificação automática de créditos recuperáveis de IRRF/PJ.</p>
           </div>
           
-          <div className="p-6 bg-white/5 backdrop-blur rounded-lg border border-white/10 transition-all hover:bg-white/10 hover:scale-105">
-            <h3 className="text-lg font-semibold text-white mb-2">Relatórios Detalhados</h3>
-            <p className="text-gray-300 text-sm">Geração de relatórios completos para compensação tributária.</p>
+          <div className="p-6 bg-gray-50 backdrop-blur rounded-lg border border-gray-200 transition-all hover:bg-gray-100 hover:scale-105">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Relatórios Detalhados</h3>
+            <p className="text-gray-600 text-sm">Geração de relatórios completos para compensação tributária.</p>
           </div>
         </div>
       </div>
       
-      <footer className="absolute bottom-0 w-full py-4 text-center text-gray-400 text-xs">
+      <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
         © {new Date().getFullYear()} Cláudio Figueiredo Advogados Associados. Todos os direitos reservados.
       </footer>
     </div>
