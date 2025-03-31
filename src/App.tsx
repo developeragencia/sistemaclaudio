@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import LoadingSpinner from "./components/ui/loading-spinner";
 import ErrorBoundary from "./components/ui/error-boundary";
 import { router } from "./app/routes";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,11 +27,13 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <AuthProvider>
-            <Toaster />
-            <Sonner />
-            <Suspense fallback={<LoadingSpinner />}>
-              <RouterProvider router={router} />
-            </Suspense>
+            <SidebarProvider>
+              <Toaster />
+              <Sonner />
+              <Suspense fallback={<LoadingSpinner />}>
+                <RouterProvider router={router} />
+              </Suspense>
+            </SidebarProvider>
           </AuthProvider>
         </TooltipProvider>
       </QueryClientProvider>

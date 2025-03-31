@@ -6,6 +6,7 @@ import SidebarUserProfile from './SidebarUserProfile';
 import SidebarContent from './SidebarContent';
 import AppHeader from './AppHeader';
 import ActiveClientNotification from './ActiveClientNotification';
+import { Sidebar } from '@/components/ui/sidebar';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
   return (
     <div className="h-screen flex w-full">
-      <div className="w-64 border-r bg-background">
+      <Sidebar variant="sidebar" collapsible="icon">
         <div className="flex flex-col h-full">
           <div className="p-4">
             <h1 className="text-xl font-bold">Sistema Claudio</h1>
@@ -43,7 +44,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             <SidebarUserProfile getInitials={getInitials} />
           </div>
         </div>
-      </div>
+      </Sidebar>
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <AppHeader 
