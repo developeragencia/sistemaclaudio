@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 210 100% 55%;
+    --primary: 220 13% 28%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 160 50% 45%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 14% 90%;
+    --secondary-foreground: 220 13% 28%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 220 13% 94%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -31,17 +31,17 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 210 100% 55%;
+    --ring: 220 13% 28%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 210 100% 10%;
+    --sidebar-background: 220 13% 28%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 210 100% 55%;
+    --sidebar-primary: 220 13% 35%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 50% 15%;
+    --sidebar-accent: 220 13% 22%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 210 50% 20%;
+    --sidebar-border: 220 13% 35%;
     --sidebar-ring: 210 100% 55%;
   }
 
@@ -123,7 +123,7 @@
   }
   
   .logo-subtitle {
-    @apply text-gray-400 font-light uppercase tracking-wider;
+    @apply text-gray-500 font-light uppercase tracking-wider;
   }
   
   /* Animated Gradient Buttons */
@@ -136,7 +136,7 @@
   
   /* Landing Page Classes */
   .hero-container {
-    @apply min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-gray-900 to-black;
+    @apply min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-white;
   }
   
   .hero-content {
@@ -144,12 +144,12 @@
   }
   
   .hero-title {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight;
-    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-800 leading-tight;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
   }
   
   .hero-subtitle {
-    @apply text-lg md:text-xl text-gray-300 mb-10;
+    @apply text-lg md:text-xl text-gray-600 mb-10;
   }
   
   .hero-cta {
@@ -247,7 +247,7 @@
   }
   
   .bg-geometric {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
     background-size: 30px 30px;
   }
   
@@ -257,10 +257,49 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+    background: linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+  }
+
+  /* Card effects */
+  .card-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-shimmer::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    transform: rotate(30deg);
+    animation: shimmer 3s infinite;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Text gradient effect */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #333333 0%, #555555 100%);
   }
 }
 
