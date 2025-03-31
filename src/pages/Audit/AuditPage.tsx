@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from "@/components/ui/use-toast"
@@ -79,7 +80,7 @@ const AuditPage: React.FC = () => {
     },
   ];
 
-  // Fix the toast.success type error by changing the variant
+  // Fixed the toast variant to use 'default' instead of 'success'
   const handleProcessAudit = async (clientId: string) => {
     setIsLoading(true);
     try {
@@ -159,6 +160,7 @@ const AuditPage: React.FC = () => {
         });
       } else {
         toast({
+          // Changed from 'success' to 'default'
           title: "Auditoria concluída",
           description: `${results.length} pagamentos processados com sucesso.`,
         });

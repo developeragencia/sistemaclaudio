@@ -1,16 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -25,13 +24,13 @@ interface TaxRate {
   created_at?: string;
 }
 
-interface TaxRatesPageProps {
-  supabase: SupabaseClient;
-}
-
-const TaxRatesPage: React.FC<TaxRatesPageProps> = ({ supabase }) => {
+const TaxRatesPage: React.FC = () => {
   const [taxRates, setTaxRates] = useState<TaxRate[]>([]);
-  const [newTaxRate, setNewTaxRate] = useState({
+  const [newTaxRate, setNewTaxRate] = useState<{
+    activity_code: string;
+    retention_rate: number | undefined;
+    description: string;
+  }>({
     activity_code: '',
     retention_rate: undefined,
     description: ''
@@ -72,13 +71,13 @@ const TaxRatesPage: React.FC<TaxRatesPageProps> = ({ supabase }) => {
     const { name, value } = e.target;
     setNewTaxRate(prevState => ({
       ...prevState,
-      [name]: value
+      [name]: name === 'retention_rate' ? Number(value) : value
     }));
   };
 
-  // Fix the TypeScript error for the tax rate insert by ensuring required fields
+  // Fixed the TypeScript error for the tax rate insert by ensuring required fields
   const handleAddTaxRate = async () => {
-    if (!newTaxRate.activity_code || !newTaxRate.retention_rate) {
+    if (!newTaxRate.activity_code || typeof newTaxRate.retention_rate !== 'number') {
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
@@ -89,10 +88,10 @@ const TaxRatesPage: React.FC<TaxRatesPageProps> = ({ supabase }) => {
 
     setIsSubmitting(true);
     try {
-      // Fix: Convert newTaxRate to have all required fields
+      // Fix: Ensure all required fields are provided and properly typed
       const taxRateToSubmit = {
         activity_code: newTaxRate.activity_code,
-        retention_rate: Number(newTaxRate.retention_rate),
+        retention_rate: newTaxRate.retention_rate,
         description: newTaxRate.description || ""
       };
 

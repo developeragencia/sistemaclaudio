@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { GavelSquare, Scale } from 'lucide-react';
+import { Gavel, Scale } from 'lucide-react';
 
 interface LogoProps {
   animated?: boolean;
@@ -58,7 +58,7 @@ const Logo: React.FC<LogoProps> = ({
           <Scale 
             className={`${iconSizes[size]} text-taxglider-blue-600 ${animated && !isMobile ? 'animate-float' : ''}`}
           />
-          <GavelSquare 
+          <Gavel 
             className={`absolute -bottom-1 -right-1 ${size === 'sm' ? 'h-4 w-4' : 'h-6 w-6'} text-taxglider-blue-800 ${animated ? 'animate-pulse' : ''}`}
           />
         </div>
