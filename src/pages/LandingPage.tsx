@@ -6,10 +6,10 @@ import { ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
   return (
-    <div className="hero-container bg-white text-gray-800">
+    <div className="min-h-screen flex flex-col bg-white text-gray-800 relative pb-16">
       <div className="grid-pattern"></div>
       
-      <div className="hero-content">
+      <div className="flex-grow flex flex-col items-center justify-center px-4 py-10">
         <div className="mb-10 animate-fade-in">
           <Logo animated size="xl" className="mx-auto" />
         </div>
@@ -48,7 +48,7 @@ const LandingPage = () => {
         </div>
       </div>
       
-      <footer className="absolute bottom-0 left-0 w-full py-4 text-center text-gray-500 text-xs">
+      <footer className="w-full py-4 text-center text-gray-500 text-xs mt-auto">
         <div className="container mx-auto px-4">
           <p>
             Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
