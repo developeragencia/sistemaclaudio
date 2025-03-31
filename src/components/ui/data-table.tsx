@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -9,6 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -19,15 +19,32 @@ export function DataTable<TData, TValue>({
   columns, 
   data 
 }: DataTableProps<TData, TValue>) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredData = data.filter((item) =>
+    Object.values(item).some(
+      (value) =>
+        value &&
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <div>
+    <div className="space-y-4">
+      <Input
+        placeholder="Buscar..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="max-w-sm"
+      />
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
