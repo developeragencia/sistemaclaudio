@@ -63,8 +63,8 @@ const Dashboard = () => {
   const { user, activeClient } = useAuth();
 
   const renderClientDashboard = () => (
-    <div className="space-y-8">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-6">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total de Créditos Recuperados"
           value="R$ 1.245.678,90"
@@ -91,7 +91,7 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2">
         <Card>
           <CardHeader className="pb-3">
             <CardTitle>Apuração de Créditos</CardTitle>
@@ -110,8 +110,8 @@ const Dashboard = () => {
   );
 
   const renderAdminDashboard = () => (
-    <div className="space-y-8">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-6">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total de Clientes"
           value="42"
@@ -138,7 +138,7 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3">
         <ClientsList className="md:col-span-1" />
         <RecentActivities activities={MOCK_ACTIVITIES} className="md:col-span-2" />
       </div>
@@ -146,13 +146,13 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col md:flex-row justify-between gap-4 md:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             {activeClient ? `Dashboard: ${activeClient.name}` : 'Dashboard'}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm md:text-base">
             {activeClient 
               ? `Visão geral dos créditos tributários e processos para ${activeClient.name}`
               : 'Visão geral do sistema e acompanhamento de processos'}
@@ -160,7 +160,7 @@ const Dashboard = () => {
         </div>
 
         {user?.role === 'representative' && (
-          <Button asChild>
+          <Button asChild className="self-start">
             <Link to="/proposals/new">
               <FileText className="mr-2 h-4 w-4" />
               Nova Proposta
@@ -171,19 +171,19 @@ const Dashboard = () => {
 
       <Separator />
 
-      <Tabs defaultValue={activeClient ? "client" : "overview"} className="space-y-6">
-        <TabsList>
-          {activeClient && <TabsTrigger value="client">Cliente Específico</TabsTrigger>}
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+      <Tabs defaultValue={activeClient ? "client" : "overview"} className="space-y-4 md:space-y-6">
+        <TabsList className="w-full max-w-md flex">
+          {activeClient && <TabsTrigger value="client" className="flex-1">Cliente Específico</TabsTrigger>}
+          <TabsTrigger value="overview" className="flex-1">Visão Geral</TabsTrigger>
         </TabsList>
 
         {activeClient && (
-          <TabsContent value="client" className="space-y-6">
+          <TabsContent value="client" className="space-y-4 md:space-y-6">
             {renderClientDashboard()}
           </TabsContent>
         )}
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-4 md:space-y-6">
           {renderAdminDashboard()}
         </TabsContent>
       </Tabs>

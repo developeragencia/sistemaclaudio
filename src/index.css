@@ -89,6 +89,10 @@
     @apply border-border;
   }
 
+  html, body {
+    @apply h-full w-full overflow-hidden;
+  }
+
   body {
     @apply bg-background text-foreground font-montserrat;
   }
@@ -105,6 +109,36 @@
 
   .card-hover {
     @apply transition-all duration-200 hover:shadow-md hover:scale-[1.01];
+  }
+  
+  /* Responsive utilities */
+  .responsive-container {
+    @apply w-full px-4 md:px-6 mx-auto;
+    max-width: 100%;
+  }
+  
+  @screen sm {
+    .responsive-container {
+      max-width: 640px;
+    }
+  }
+  
+  @screen md {
+    .responsive-container {
+      max-width: 768px;
+    }
+  }
+  
+  @screen lg {
+    .responsive-container {
+      max-width: 1024px;
+    }
+  }
+  
+  @screen xl {
+    .responsive-container {
+      max-width: 1280px;
+    }
   }
   
   /* Logo Animation Classes */
