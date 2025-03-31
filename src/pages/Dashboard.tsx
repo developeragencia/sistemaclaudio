@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BarChart3, Calculator, Users, FileText, ArrowUpRight } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
@@ -10,8 +9,32 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import { 
+  Shield, 
+  KeyRound, 
+  History, 
+  HardDrive, 
+  Network, 
+  Globe, 
+  FileEdit, 
+  HeartHandshake, 
+  HelpCircle,
+  Phone,
+  Workflow,
+  BookOpen,
+  BarChart 
+} from 'lucide-react';
 
-// Dados simulados para desenvolvimento
 const MOCK_ACTIVITIES: Activity[] = [
   {
     id: '1',
@@ -138,6 +161,111 @@ const Dashboard = () => {
         />
       </div>
 
+      {user?.role === 'admin' && (
+        <Card className="p-6">
+          <CardHeader className="px-0 pt-0">
+            <CardTitle>Menu do Administrador</CardTitle>
+            <CardDescription>Acesso rápido às funções administrativas</CardDescription>
+          </CardHeader>
+          <CardContent className="px-0 pt-2 pb-0">
+            <NavigationMenu>
+              <NavigationMenuList className="flex-wrap gap-1">
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Gestão do Sistema</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
+                      <ListItem href="/admin-dashboard" title="Painel de Controle" icon={<BarChart className="h-4 w-4 mr-2" />}>
+                        Visão geral de métricas e indicadores
+                      </ListItem>
+                      <ListItem href="/settings" title="Configurações" icon={<FileEdit className="h-4 w-4 mr-2" />}>
+                        Configurações gerais do sistema
+                      </ListItem>
+                      <ListItem href="/users" title="Usuários" icon={<Users className="h-4 w-4 mr-2" />}>
+                        Gerenciamento de usuários e permissões
+                      </ListItem>
+                      <ListItem href="/workflows" title="Fluxos de Trabalho" icon={<Workflow className="h-4 w-4 mr-2" />}>
+                        Configuração de processos automatizados
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Segurança</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
+                      <ListItem href="/security" title="Segurança" icon={<Shield className="h-4 w-4 mr-2" />}>
+                        Políticas e configurações de segurança
+                      </ListItem>
+                      <ListItem href="/access-control" title="Controle de Acesso" icon={<KeyRound className="h-4 w-4 mr-2" />}>
+                        Gerenciamento de permissões e níveis de acesso
+                      </ListItem>
+                      <ListItem href="/logs" title="Logs do Sistema" icon={<History className="h-4 w-4 mr-2" />}>
+                        Histórico de atividades e auditoria
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Integrações</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
+                      <ListItem href="/backup" title="Backup & Restauração" icon={<HardDrive className="h-4 w-4 mr-2" />}>
+                        Gerenciamento de backup e restauração de dados
+                      </ListItem>
+                      <ListItem href="/integrations" title="Integrações" icon={<Network className="h-4 w-4 mr-2" />}>
+                        Conexões com serviços externos
+                      </ListItem>
+                      <ListItem href="/cnpj-integration" title="Integração CNPJ" icon={<FileText className="h-4 w-4 mr-2" />}>
+                        Pesquisa e validação de CNPJ
+                      </ListItem>
+                      <ListItem href="/tax-rates" title="Alíquotas Fiscais" icon={<Calculator className="h-4 w-4 mr-2" />}>
+                        Gerenciamento de alíquotas de impostos
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Conteúdo</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
+                      <ListItem href="/website" title="Website" icon={<Globe className="h-4 w-4 mr-2" />}>
+                        Gestão de conteúdo do website
+                      </ListItem>
+                      <ListItem href="/content" title="Gerenciar Conteúdo" icon={<FileEdit className="h-4 w-4 mr-2" />}>
+                        Criação e edição de conteúdo do portal
+                      </ListItem>
+                      <ListItem href="/knowledge-base" title="Base de Conhecimento" icon={<BookOpen className="h-4 w-4 mr-2" />}>
+                        Documentação e base de conhecimento
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Suporte</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
+                      <ListItem href="/support-tickets" title="Tickets de Suporte" icon={<HeartHandshake className="h-4 w-4 mr-2" />}>
+                        Gerenciamento de solicitações de suporte
+                      </ListItem>
+                      <ListItem href="/help" title="Ajuda" icon={<HelpCircle className="h-4 w-4 mr-2" />}>
+                        Documentação e recursos de ajuda
+                      </ListItem>
+                      <ListItem href="/contact" title="Contato" icon={<Phone className="h-4 w-4 mr-2" />}>
+                        Informações de contato e suporte
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3">
         <ClientsList className="md:col-span-1" />
         <RecentActivities activities={MOCK_ACTIVITIES} className="md:col-span-2" />
@@ -190,5 +318,36 @@ const Dashboard = () => {
     </div>
   );
 };
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a"> & { 
+    title: string;
+    icon?: React.ReactNode;
+  }
+>(({ className, title, icon, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="flex items-center text-sm font-medium leading-none">
+            {icon} {title}
+          </div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
 
 export default Dashboard;
