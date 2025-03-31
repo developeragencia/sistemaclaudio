@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
@@ -46,10 +45,17 @@ const LandingPage = () => {
             <p className="text-gray-600 text-sm">Geração de relatórios completos para compensação tributária.</p>
           </div>
         </div>
+        
+        <div className="mt-16 pt-10 border-t border-gray-200 text-center animate-fade-in animate-delay-4">
+          <p className="text-gray-500 text-sm">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
+          <p className="mt-1 text-gray-500 text-sm">
+            Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
+          </p>
+        </div>
       </div>
       
       <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
-        <div>© {new Date().getFullYear()} Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
+        <div>© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
         <div className="mt-1">
           Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
         </div>
