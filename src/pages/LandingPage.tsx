@@ -48,11 +48,13 @@ const LandingPage = () => {
         </div>
       </div>
       
-      <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
-        <p>
-          Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
-        </p>
-        <p className="mt-1">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
+      <footer className="absolute bottom-0 left-0 w-full py-4 text-center text-gray-500 text-xs">
+        <div className="container mx-auto px-4">
+          <p>
+            Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
+          </p>
+          <p className="mt-1">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
+        </div>
       </footer>
     </div>
   );
