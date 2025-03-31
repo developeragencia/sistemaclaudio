@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { 
   Carousel, 
   CarouselContent, 
@@ -32,9 +32,7 @@ const features = [
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-gray-800 relative">
-      <div className="grid-pattern"></div>
-      
+    <div className="min-h-screen flex flex-col bg-white text-gray-800">
       <div className="flex-grow flex flex-col items-center justify-center px-4 py-10">
         <div className="mb-10 animate-fade-in">
           <Logo animated size="xl" className="mx-auto" />
@@ -50,14 +48,14 @@ const LandingPage = () => {
         </p>
         
         <div className="animate-fade-in animate-delay-3 mb-16">
-          <Link to="/login" className="gradient-button group">
+          <Link to="/login" className="gradient-button group bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-300 flex items-center">
             Acessar Sistema
             <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" size={18} />
           </Link>
         </div>
         
-        <div className="w-full max-w-5xl px-4 mb-16 animate-fade-in animate-delay-4">
-          <h2 className="text-2xl md:text-3xl font-semibold text-center mb-10 text-gray-800">
+        <div className="w-full max-w-5xl px-4 mb-16">
+          <h2 className="text-2xl md:text-3xl font-semibold text-center mb-10 text-gray-800 animate-fade-in">
             Nossos Recursos
           </h2>
           
@@ -72,9 +70,9 @@ const LandingPage = () => {
               {features.map((feature, index) => (
                 <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
                   <div className="p-1">
-                    <Card className="bg-gradient-to-br from-white to-gray-50 border-gray-200 shadow-lg overflow-hidden card-hover">
+                    <Card className="bg-gradient-to-br from-white to-gray-50 border-gray-200 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                       <CardContent className="p-6 flex flex-col items-center text-center">
-                        <div className="text-4xl mb-4 bg-gray-100 p-4 rounded-full w-16 h-16 flex items-center justify-center">
+                        <div className="text-4xl mb-4 bg-blue-50 p-4 rounded-full w-16 h-16 flex items-center justify-center animate-float">
                           {feature.icon}
                         </div>
                         <CardTitle className="text-lg font-semibold text-gray-800 mb-2">
@@ -96,7 +94,7 @@ const LandingPage = () => {
           </Carousel>
         </div>
         
-        <div className="w-full max-w-4xl px-4 animate-fade-in animate-delay-4 mb-16">
+        <div className="w-full max-w-4xl px-4 mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gray-50 p-8 rounded-lg border border-gray-200 shadow-sm text-center animate-float">
               <h3 className="text-xl font-semibold mb-4">+5000 processos</h3>
