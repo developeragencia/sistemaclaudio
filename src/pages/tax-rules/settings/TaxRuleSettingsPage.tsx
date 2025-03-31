@@ -1,62 +1,52 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { useState } from "react";
+
+interface TaxRuleSettings {
+  automaticUpdates: boolean;
+  notifyChanges: boolean;
+  requireApproval: boolean;
+  historyRetentionDays: number;
+  defaultTaxType: string;
+  defaultRate: number;
+  defaultStatus: string;
+}
 
 export function TaxRuleSettingsPage() {
-  const [automaticUpdates, setAutomaticUpdates] = useState(true);
-  const [notifyChanges, setNotifyChanges] = useState(true);
-  const [requireApproval, setRequireApproval] = useState(true);
-  const [defaultCurrency, setDefaultCurrency] = useState("BRL");
-  const [decimalPlaces, setDecimalPlaces] = useState("2");
-  const [roundingMethod, setRoundingMethod] = useState("round");
-  const [backupFrequency, setBackupFrequency] = useState("daily");
-  const [retentionPeriod, setRetentionPeriod] = useState("365");
-  const [apiEndpoint, setApiEndpoint] = useState("https://api.example.com/tax-rules");
-  const [apiKey, setApiKey] = useState("****************************");
+  const [settings, setSettings] = useState<TaxRuleSettings>({
+    automaticUpdates: true,
+    notifyChanges: true,
+    requireApproval: true,
+    historyRetentionDays: 365,
+    defaultTaxType: "ICMS",
+    defaultRate: 18,
+    defaultStatus: "active",
+  });
 
-  const handleSave = () => {
-    // Aqui você implementaria a lógica para salvar as configurações
-    toast.success("Configurações salvas com sucesso!");
-  };
-
-  const handleTestConnection = () => {
-    // Aqui você implementaria a lógica para testar a conexão com a API
-    toast.success("Conexão com a API testada com sucesso!");
-  };
-
-  const handleResetDefaults = () => {
-    // Aqui você implementaria a lógica para resetar as configurações
-    toast.success("Configurações resetadas para os valores padrão!");
+  const handleSettingChange = (key: keyof TaxRuleSettings, value: any) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
   };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configurações</h1>
-        <p className="text-muted-foreground">
-          Gerencie as configurações gerais das regras tributárias
-        </p>
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Configurações de Regras Tributárias</h2>
+        <div className="flex items-center space-x-2">
+          <Button variant="outline">Restaurar Padrões</Button>
+          <Button>Salvar Alterações</Button>
+        </div>
       </div>
 
-      <Tabs defaultValue="general">
+      <Tabs defaultValue="general" className="space-y-4">
         <TabsList>
           <TabsTrigger value="general">Geral</TabsTrigger>
-          <TabsTrigger value="calculations">Cálculos</TabsTrigger>
-          <TabsTrigger value="backup">Backup</TabsTrigger>
-          <TabsTrigger value="integration">Integração</TabsTrigger>
+          <TabsTrigger value="defaults">Valores Padrão</TabsTrigger>
+          <TabsTrigger value="notifications">Notificações</TabsTrigger>
+          <TabsTrigger value="history">Histórico</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-4">
@@ -64,126 +54,63 @@ export function TaxRuleSettingsPage() {
             <CardHeader>
               <CardTitle>Configurações Gerais</CardTitle>
               <CardDescription>
-                Configure as opções gerais do sistema de regras tributárias
+                Configure as opções gerais para o gerenciamento de regras tributárias
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="flex items-center justify-between space-x-2">
-                <Label htmlFor="automatic-updates">Atualizações Automáticas</Label>
+                <Label htmlFor="automaticUpdates">Atualizações Automáticas</Label>
                 <Switch
-                  id="automatic-updates"
-                  checked={automaticUpdates}
-                  onCheckedChange={setAutomaticUpdates}
+                  id="automaticUpdates"
+                  checked={settings.automaticUpdates}
+                  onCheckedChange={(checked) => handleSettingChange("automaticUpdates", checked)}
                 />
               </div>
               <div className="flex items-center justify-between space-x-2">
-                <Label htmlFor="notify-changes">Notificar Alterações</Label>
+                <Label htmlFor="requireApproval">Exigir Aprovação para Mudanças</Label>
                 <Switch
-                  id="notify-changes"
-                  checked={notifyChanges}
-                  onCheckedChange={setNotifyChanges}
-                />
-              </div>
-              <div className="flex items-center justify-between space-x-2">
-                <Label htmlFor="require-approval">Exigir Aprovação</Label>
-                <Switch
-                  id="require-approval"
-                  checked={requireApproval}
-                  onCheckedChange={setRequireApproval}
+                  id="requireApproval"
+                  checked={settings.requireApproval}
+                  onCheckedChange={(checked) => handleSettingChange("requireApproval", checked)}
                 />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="calculations" className="space-y-4">
+        <TabsContent value="defaults" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Configurações de Cálculo</CardTitle>
+              <CardTitle>Valores Padrão</CardTitle>
               <CardDescription>
-                Configure as opções de cálculo e formatação de valores
+                Configure os valores padrão para novas regras tributárias
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="default-currency">Moeda Padrão</Label>
-                  <Select value={defaultCurrency} onValueChange={setDefaultCurrency}>
-                    <SelectTrigger id="default-currency">
-                      <SelectValue placeholder="Selecione a moeda" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="BRL">Real (BRL)</SelectItem>
-                      <SelectItem value="USD">Dólar (USD)</SelectItem>
-                      <SelectItem value="EUR">Euro (EUR)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="decimal-places">Casas Decimais</Label>
-                  <Select value={decimalPlaces} onValueChange={setDecimalPlaces}>
-                    <SelectTrigger id="decimal-places">
-                      <SelectValue placeholder="Selecione o número de casas decimais" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2">2 casas decimais</SelectItem>
-                      <SelectItem value="3">3 casas decimais</SelectItem>
-                      <SelectItem value="4">4 casas decimais</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="rounding-method">Método de Arredondamento</Label>
-                  <Select value={roundingMethod} onValueChange={setRoundingMethod}>
-                    <SelectTrigger id="rounding-method">
-                      <SelectValue placeholder="Selecione o método" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="round">Arredondamento Padrão</SelectItem>
-                      <SelectItem value="ceil">Sempre para Cima</SelectItem>
-                      <SelectItem value="floor">Sempre para Baixo</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="backup" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Configurações de Backup</CardTitle>
-              <CardDescription>
-                Configure as opções de backup e retenção de dados
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="backup-frequency">Frequência de Backup</Label>
-                  <Select value={backupFrequency} onValueChange={setBackupFrequency}>
-                    <SelectTrigger id="backup-frequency">
-                      <SelectValue placeholder="Selecione a frequência" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="hourly">A cada hora</SelectItem>
-                      <SelectItem value="daily">Diário</SelectItem>
-                      <SelectItem value="weekly">Semanal</SelectItem>
-                      <SelectItem value="monthly">Mensal</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="retention-period">Período de Retenção (dias)</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="defaultTaxType">Tipo de Imposto Padrão</Label>
                   <Input
-                    id="retention-period"
+                    id="defaultTaxType"
+                    value={settings.defaultTaxType}
+                    onChange={(e) => handleSettingChange("defaultTaxType", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="defaultRate">Alíquota Padrão (%)</Label>
+                  <Input
+                    id="defaultRate"
                     type="number"
-                    value={retentionPeriod}
-                    onChange={(e) => setRetentionPeriod(e.target.value)}
+                    value={settings.defaultRate}
+                    onChange={(e) => handleSettingChange("defaultRate", Number(e.target.value))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="defaultStatus">Status Padrão</Label>
+                  <Input
+                    id="defaultStatus"
+                    value={settings.defaultStatus}
+                    onChange={(e) => handleSettingChange("defaultStatus", e.target.value)}
                   />
                 </div>
               </div>
@@ -191,52 +118,49 @@ export function TaxRuleSettingsPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="integration" className="space-y-4">
+        <TabsContent value="notifications" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Configurações de Integração</CardTitle>
+              <CardTitle>Configurações de Notificações</CardTitle>
               <CardDescription>
-                Configure as opções de integração com APIs externas
+                Gerencie como você deseja ser notificado sobre alterações nas regras
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="api-endpoint">Endpoint da API</Label>
-                  <Input
-                    id="api-endpoint"
-                    value={apiEndpoint}
-                    onChange={(e) => setApiEndpoint(e.target.value)}
-                  />
-                </div>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="notifyChanges">Notificar Alterações</Label>
+                <Switch
+                  id="notifyChanges"
+                  checked={settings.notifyChanges}
+                  onCheckedChange={(checked) => handleSettingChange("notifyChanges", checked)}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="api-key">Chave da API</Label>
-                  <Input
-                    id="api-key"
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                  />
-                </div>
-
-                <Button onClick={handleTestConnection}>
-                  Testar Conexão
-                </Button>
+        <TabsContent value="history" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Configurações de Histórico</CardTitle>
+              <CardDescription>
+                Configure por quanto tempo o histórico de alterações será mantido
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="historyRetentionDays">Dias de Retenção do Histórico</Label>
+                <Input
+                  id="historyRetentionDays"
+                  type="number"
+                  value={settings.historyRetentionDays}
+                  onChange={(e) => handleSettingChange("historyRetentionDays", Number(e.target.value))}
+                />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
-
-      <div className="flex gap-4">
-        <Button onClick={handleSave}>
-          Salvar Configurações
-        </Button>
-        <Button variant="outline" onClick={handleResetDefaults}>
-          Restaurar Padrões
-        </Button>
-      </div>
     </div>
   );
 } 

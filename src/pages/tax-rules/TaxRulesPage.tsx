@@ -1,241 +1,217 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { TaxRuleDialog } from "@/components/tax-rules/TaxRuleDialog";
-import { toast } from "sonner";
+import { DataTable } from "@/components/ui/data-table";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-const taxRules = [
-  {
-    id: 1,
-    name: "IRRF - Serviços Profissionais",
-    type: "IRRF",
-    rate: "1.5%",
-    baseValue: "R$ 666,00",
-    status: "active",
-    lastUpdate: "2024-03-15",
-    description: "Retenção de IRRF para serviços profissionais prestados por pessoa jurídica",
-  },
-  {
-    id: 2,
-    name: "PIS/COFINS/CSLL - Serviços",
-    type: "PIS/COFINS/CSLL",
-    rate: "4.65%",
-    baseValue: "R$ 5.000,00",
-    status: "active",
-    lastUpdate: "2024-03-10",
-    description: "Retenção conjunta de PIS, COFINS e CSLL para serviços prestados por pessoa jurídica",
-  },
-  {
-    id: 3,
-    name: "ISS - Serviços de TI",
-    type: "ISS",
-    rate: "2%",
-    baseValue: "R$ 0,00",
-    status: "inactive",
-    lastUpdate: "2024-02-28",
-    description: "Retenção de ISS para serviços de tecnologia da informação",
-  },
-];
-
-const statusColors = {
-  active: "bg-green-100 text-green-800",
-  inactive: "bg-gray-100 text-gray-800",
-};
+interface TaxRule {
+  id: string;
+  name: string;
+  description: string;
+  taxType: string;
+  rate: number;
+  startDate: string;
+  endDate: string | null;
+  status: "active" | "inactive" | "pending";
+}
 
 export function TaxRulesPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedRule, setSelectedRule] = useState<any>(null);
+  const [rules] = useState<TaxRule[]>([
+    {
+      id: "1",
+      name: "ICMS Padrão",
+      description: "Alíquota padrão de ICMS para operações internas",
+      taxType: "ICMS",
+      rate: 18,
+      startDate: "2024-01-01",
+      endDate: null,
+      status: "active",
+    },
+    {
+      id: "2",
+      name: "PIS/COFINS Regime Não-Cumulativo",
+      description: "Alíquotas para empresas no regime não-cumulativo",
+      taxType: "PIS/COFINS",
+      rate: 9.25,
+      startDate: "2024-01-01",
+      endDate: null,
+      status: "active",
+    },
+    {
+      id: "3",
+      name: "IPI Tabela TIPI",
+      description: "Alíquotas conforme Tabela TIPI 2024",
+      taxType: "IPI",
+      rate: 15,
+      startDate: "2024-01-01",
+      endDate: "2024-12-31",
+      status: "pending",
+    },
+  ]);
 
-  const filteredRules = taxRules.filter((rule) => {
-    const matchesSearch = rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      rule.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = !selectedType || rule.type === selectedType;
-    return matchesSearch && matchesType;
-  });
-
-  const activeRules = taxRules.filter(rule => rule.status === "active").length;
-  const inactiveRules = taxRules.filter(rule => rule.status === "inactive").length;
-
-  const handleSubmit = async (data: any) => {
-    try {
-      // Aqui você implementaria a lógica para salvar no backend
-      console.log("Dados da regra tributária:", data);
-      toast.success(selectedRule ? "Regra atualizada com sucesso!" : "Regra criada com sucesso!");
-      setDialogOpen(false);
-      setSelectedRule(null);
-    } catch (error) {
-      console.error("Erro ao salvar regra:", error);
-      toast.error("Erro ao salvar regra tributária");
-    }
-  };
-
-  const handleEdit = (rule: any) => {
-    setSelectedRule(rule);
-    setDialogOpen(true);
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      // Aqui você implementaria a lógica para deletar no backend
-      console.log("Deletando regra:", id);
-      toast.success("Regra excluída com sucesso!");
-    } catch (error) {
-      console.error("Erro ao excluir regra:", error);
-      toast.error("Erro ao excluir regra tributária");
-    }
-  };
+  const columns = [
+    {
+      accessorKey: "name",
+      header: "Nome",
+    },
+    {
+      accessorKey: "description",
+      header: "Descrição",
+    },
+    {
+      accessorKey: "taxType",
+      header: "Tipo",
+    },
+    {
+      accessorKey: "rate",
+      header: "Alíquota",
+      cell: ({ row }: any) => {
+        return `${row.original.rate}%`;
+      },
+    },
+    {
+      accessorKey: "startDate",
+      header: "Início",
+      cell: ({ row }: any) => {
+        return new Date(row.original.startDate).toLocaleDateString('pt-BR');
+      },
+    },
+    {
+      accessorKey: "endDate",
+      header: "Fim",
+      cell: ({ row }: any) => {
+        return row.original.endDate 
+          ? new Date(row.original.endDate).toLocaleDateString('pt-BR')
+          : "Indeterminado";
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }: any) => {
+        const status = row.original.status;
+        const styles = {
+          active: "bg-green-100 text-green-800",
+          inactive: "bg-red-100 text-red-800",
+          pending: "bg-yellow-100 text-yellow-800",
+        };
+        const labels = {
+          active: "Ativa",
+          inactive: "Inativa",
+          pending: "Pendente",
+        };
+        return (
+          <span className={`px-2 py-1 rounded-full text-sm ${styles[status]}`}>
+            {labels[status]}
+          </span>
+        );
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }: any) => {
+        return (
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to={`/app/tax-rules/history?rule=${row.original.id}`}>
+                Histórico
+              </Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to={`/app/tax-rules/settings?rule=${row.original.id}`}>
+                Configurações
+              </Link>
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-end">
-        <Button onClick={() => {
-          setSelectedRule(null);
-          setDialogOpen(true);
-        }}>
-          Nova Regra
-        </Button>
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Regras Tributárias</h2>
+        <div className="flex items-center space-x-2">
+          <Button>Nova Regra</Button>
+          <Button variant="outline">Exportar Regras</Button>
+        </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Regras</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{taxRules.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Regras Ativas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeRules}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Regras Inativas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{inactiveRules}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Última Atualização</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {new Date(Math.max(...taxRules.map(r => new Date(r.lastUpdate).getTime())))
-                .toLocaleDateString("pt-BR")}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Tabs defaultValue="all" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="all">Todas</TabsTrigger>
+          <TabsTrigger value="active">Ativas</TabsTrigger>
+          <TabsTrigger value="pending">Pendentes</TabsTrigger>
+          <TabsTrigger value="inactive">Inativas</TabsTrigger>
+        </TabsList>
 
-      <div className="flex gap-4">
-        <Input
-          placeholder="Buscar regras..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
-        <Select value={selectedType} onValueChange={setSelectedType}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filtrar por tipo" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Todos os tipos</SelectItem>
-            <SelectItem value="IRRF">IRRF</SelectItem>
-            <SelectItem value="ISS">ISS</SelectItem>
-            <SelectItem value="PIS">PIS</SelectItem>
-            <SelectItem value="COFINS">COFINS</SelectItem>
-            <SelectItem value="CSLL">CSLL</SelectItem>
-            <SelectItem value="PIS/COFINS/CSLL">PIS/COFINS/CSLL</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        <TabsContent value="all" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Todas as Regras</CardTitle>
+              <CardDescription>
+                Visualize todas as regras tributárias cadastradas
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable columns={columns} data={rules} />
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Alíquota</TableHead>
-              <TableHead>Valor Base</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Última Atualização</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredRules.map((rule) => (
-              <TableRow key={rule.id}>
-                <TableCell className="font-medium">{rule.name}</TableCell>
-                <TableCell>{rule.type}</TableCell>
-                <TableCell>{rule.rate}</TableCell>
-                <TableCell>{rule.baseValue}</TableCell>
-                <TableCell>
-                  <Badge className={statusColors[rule.status as keyof typeof statusColors]}>
-                    {rule.status === "active" ? "Ativo" : "Inativo"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{new Date(rule.lastUpdate).toLocaleDateString("pt-BR")}</TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="ghost"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleEdit(rule)}
-                  >
-                    ✏️
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleDelete(rule.id)}
-                  >
-                    🗑️
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+        <TabsContent value="active" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Regras Ativas</CardTitle>
+              <CardDescription>
+                Regras tributárias atualmente em vigor
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable 
+                columns={columns} 
+                data={rules.filter(rule => rule.status === 'active')} 
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      <TaxRuleDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onSubmit={handleSubmit}
-        initialData={selectedRule}
-      />
+        <TabsContent value="pending" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Regras Pendentes</CardTitle>
+              <CardDescription>
+                Regras tributárias aguardando aprovação
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable 
+                columns={columns} 
+                data={rules.filter(rule => rule.status === 'pending')} 
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="inactive" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Regras Inativas</CardTitle>
+              <CardDescription>
+                Regras tributárias desativadas ou expiradas
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable 
+                columns={columns} 
+                data={rules.filter(rule => rule.status === 'inactive')} 
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 } 

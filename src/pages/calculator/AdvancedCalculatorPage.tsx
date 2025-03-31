@@ -3,49 +3,92 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
 interface TaxCalculation {
   baseValue: number;
   taxType: string;
   rate: number;
-  additionalRate?: number;
-  deductions?: number;
-  result: number;
+  taxValue: number;
+  totalValue: number;
+  calculatedAt: string;
+  details: {
+    [key: string]: number;
+  };
 }
 
 export function AdvancedCalculatorPage() {
-  const [baseValue, setBaseValue] = useState("");
-  const [taxType, setTaxType] = useState("");
-  const [rate, setRate] = useState("");
-  const [additionalRate, setAdditionalRate] = useState("");
-  const [deductions, setDeductions] = useState("");
+  const [baseValue, setBaseValue] = useState<string>("");
+  const [selectedTaxes, setSelectedTaxes] = useState<string[]>([]);
+  const [result, setResult] = useState<TaxCalculation | null>(null);
   const [history, setHistory] = useState<TaxCalculation[]>([]);
+  const [isCompound, setIsCompound] = useState(false);
 
-  const calculateTax = () => {
-    const base = parseFloat(baseValue);
-    const mainRate = parseFloat(rate);
-    const additional = parseFloat(additionalRate) || 0;
-    const deduct = parseFloat(deductions) || 0;
+  const taxRates = {
+    ICMS: 18,
+    IPI: 10,
+    ISS: 5,
+    PIS: 1.65,
+    COFINS: 7.6,
+  };
 
-    if (isNaN(base) || isNaN(mainRate)) {
-      return;
+  const handleCalculate = () => {
+    if (!baseValue || selectedTaxes.length === 0) return;
+
+    const baseValueNum = parseFloat(baseValue);
+    let totalTaxValue = 0;
+    const details: { [key: string]: number } = {};
+
+    if (isCompound) {
+      let accumulatedValue = baseValueNum;
+      selectedTaxes.forEach(tax => {
+        const rate = taxRates[tax as keyof typeof taxRates];
+        const taxValue = (accumulatedValue * rate) / 100;
+        details[tax] = taxValue;
+        totalTaxValue += taxValue;
+        accumulatedValue += taxValue;
+      });
+    } else {
+      selectedTaxes.forEach(tax => {
+        const rate = taxRates[tax as keyof typeof taxRates];
+        const taxValue = (baseValueNum * rate) / 100;
+        details[tax] = taxValue;
+        totalTaxValue += taxValue;
+      });
     }
 
-    const taxValue = base * (mainRate / 100);
-    const additionalValue = base * (additional / 100);
-    const totalTax = taxValue + additionalValue - deduct;
+    const totalValue = baseValueNum + totalTaxValue;
+    const effectiveRate = (totalTaxValue / baseValueNum) * 100;
 
-    const calculation: TaxCalculation = {
-      baseValue: base,
-      taxType,
-      rate: mainRate,
-      additionalRate: additional,
-      deductions: deduct,
-      result: totalTax,
+    const newResult: TaxCalculation = {
+      baseValue: baseValueNum,
+      taxType: selectedTaxes.join("+"),
+      rate: effectiveRate,
+      taxValue: totalTaxValue,
+      totalValue,
+      calculatedAt: new Date().toISOString(),
+      details,
     };
 
-    setHistory([calculation, ...history].slice(0, 10));
+    setResult(newResult);
+    setHistory(prev => [newResult, ...prev].slice(0, 10));
+  };
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
+  const handleTaxSelection = (tax: string) => {
+    setSelectedTaxes(prev => 
+      prev.includes(tax) 
+        ? prev.filter(t => t !== tax)
+        : [...prev, tax]
+    );
   };
 
   return (
@@ -55,11 +98,11 @@ export function AdvancedCalculatorPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="col-span-1">
+        <Card>
           <CardHeader>
-            <CardTitle>Cálculo de Impostos Avançado</CardTitle>
+            <CardTitle>Cálculo de Impostos Múltiplos</CardTitle>
             <CardDescription>
-              Calcule impostos com taxas adicionais e deduções
+              Calcule múltiplos impostos simultaneamente com opção de cálculo composto
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -67,124 +110,139 @@ export function AdvancedCalculatorPage() {
               <Label htmlFor="baseValue">Valor Base</Label>
               <Input
                 id="baseValue"
-                placeholder="Digite o valor base"
                 type="number"
+                placeholder="0,00"
                 value={baseValue}
                 onChange={(e) => setBaseValue(e.target.value)}
               />
             </div>
-
+            
             <div className="space-y-2">
-              <Label htmlFor="taxType">Tipo de Imposto</Label>
-              <Select value={taxType} onValueChange={setTaxType}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tipo de imposto" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="irpj">IRPJ</SelectItem>
-                  <SelectItem value="csll">CSLL</SelectItem>
-                  <SelectItem value="pis">PIS</SelectItem>
-                  <SelectItem value="cofins">COFINS</SelectItem>
-                  <SelectItem value="icms">ICMS</SelectItem>
-                  <SelectItem value="ipi">IPI</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Impostos Aplicáveis</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(taxRates).map(([tax, rate]) => (
+                  <Button
+                    key={tax}
+                    variant={selectedTaxes.includes(tax) ? "default" : "outline"}
+                    onClick={() => handleTaxSelection(tax)}
+                    className="justify-start"
+                  >
+                    {tax} ({rate}%)
+                  </Button>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="rate">Alíquota Principal (%)</Label>
-              <Input
-                id="rate"
-                placeholder="Digite a alíquota principal"
-                type="number"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="compound"
+                checked={isCompound}
+                onCheckedChange={setIsCompound}
               />
+              <Label htmlFor="compound">Cálculo Composto</Label>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="additionalRate">Alíquota Adicional (%)</Label>
-              <Input
-                id="additionalRate"
-                placeholder="Digite a alíquota adicional (opcional)"
-                type="number"
-                value={additionalRate}
-                onChange={(e) => setAdditionalRate(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="deductions">Deduções</Label>
-              <Input
-                id="deductions"
-                placeholder="Digite o valor das deduções (opcional)"
-                type="number"
-                value={deductions}
-                onChange={(e) => setDeductions(e.target.value)}
-              />
-            </div>
-
-            <Button onClick={calculateTax} className="w-full">
+            <Button 
+              className="w-full" 
+              onClick={handleCalculate}
+              disabled={!baseValue || selectedTaxes.length === 0}
+            >
               Calcular
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Histórico de Cálculos</CardTitle>
-            <CardDescription>
-              Últimos 10 cálculos realizados
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {history.map((calc, index) => (
-                <div
-                  key={index}
-                  className="p-4 border rounded-lg space-y-2"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">
-                      {calc.taxType.toUpperCase()}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      Alíquota: {calc.rate}%
-                      {calc.additionalRate ? ` + ${calc.additionalRate}%` : ""}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Valor Base:</p>
-                      <p className="font-medium">
-                        R$ {calc.baseValue.toFixed(2)}
-                      </p>
-                    </div>
-                    {calc.deductions ? (
-                      <div>
-                        <p className="text-muted-foreground">Deduções:</p>
-                        <p className="font-medium">
-                          R$ {calc.deductions.toFixed(2)}
-                        </p>
-                      </div>
-                    ) : null}
-                    <div className="col-span-2">
-                      <p className="text-muted-foreground">Imposto Total:</p>
-                      <p className="font-medium text-lg">
-                        R$ {calc.result.toFixed(2)}
-                      </p>
-                    </div>
+        {result && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Resultado</CardTitle>
+              <CardDescription>
+                Detalhamento do cálculo {isCompound ? "composto" : "simples"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Valor Base</Label>
+                  <div className="text-2xl font-bold">
+                    {formatCurrency(result.baseValue)}
                   </div>
                 </div>
-              ))}
-              {history.length === 0 && (
-                <p className="text-center text-muted-foreground">
-                  Nenhum cálculo realizado ainda
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                <div>
+                  <Label>Total de Impostos</Label>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {formatCurrency(result.taxValue)}
+                  </div>
+                </div>
+                <div>
+                  <Label>Alíquota Efetiva</Label>
+                  <div className="text-lg">
+                    {result.rate.toFixed(2)}%
+                  </div>
+                </div>
+                <div>
+                  <Label>Valor Total</Label>
+                  <div className="text-2xl font-bold text-green-600">
+                    {formatCurrency(result.totalValue)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Detalhamento por Imposto</Label>
+                <div className="rounded-md border p-4 space-y-2">
+                  {Object.entries(result.details).map(([tax, value]) => (
+                    <div key={tax} className="flex justify-between">
+                      <span>{tax}</span>
+                      <span className="font-medium">{formatCurrency(value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {history.length > 0 && (
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <CardTitle>Histórico de Cálculos</CardTitle>
+              <CardDescription>
+                Últimos 10 cálculos realizados
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-slate-50">
+                      <th className="p-2 text-left">Data/Hora</th>
+                      <th className="p-2 text-left">Impostos</th>
+                      <th className="p-2 text-right">Valor Base</th>
+                      <th className="p-2 text-right">Alíquota Efetiva</th>
+                      <th className="p-2 text-right">Total Impostos</th>
+                      <th className="p-2 text-right">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.map((item, index) => (
+                      <tr key={index} className="border-b">
+                        <td className="p-2">
+                          {new Date(item.calculatedAt).toLocaleString('pt-BR')}
+                        </td>
+                        <td className="p-2">{item.taxType}</td>
+                        <td className="p-2 text-right">{formatCurrency(item.baseValue)}</td>
+                        <td className="p-2 text-right">{item.rate.toFixed(2)}%</td>
+                        <td className="p-2 text-right">{formatCurrency(item.taxValue)}</td>
+                        <td className="p-2 text-right">{formatCurrency(item.totalValue)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
