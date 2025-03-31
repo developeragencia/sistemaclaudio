@@ -12,6 +12,9 @@ import Clients from "./pages/Clients";
 import Proposals from "./pages/Proposals";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./components/layout/AppLayout";
+import CNPJIntegration from "./pages/CNPJ/Integration";
+import AuditPage from "./pages/Audit/AuditPage";
+import TaxRatesPage from "./pages/TaxRates/TaxRatesPage";
 
 const queryClient = new QueryClient();
 
@@ -130,7 +133,7 @@ const App = () => (
             <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
             <Route path="/credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
             <Route path="/reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-            <Route path="/audit" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+            <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
             
             {/* Rotas administrativas - Principal */}
             <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
@@ -145,6 +148,8 @@ const App = () => (
             <Route path="/security" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
             <Route path="/access-control" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
             <Route path="/logs" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
+            <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
             
             {/* Rotas administrativas - Operacional */}
             <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />

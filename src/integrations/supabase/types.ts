@@ -9,7 +9,195 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      audit_results: {
+        Row: {
+          created_at: string
+          id: string
+          net_amount: number
+          original_amount: number
+          payment_id: string
+          retention_amount: number
+          retention_rate: number
+          supplier_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          net_amount: number
+          original_amount: number
+          payment_id: string
+          retention_amount: number
+          retention_rate: number
+          supplier_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          net_amount?: number
+          original_amount?: number
+          payment_id?: string
+          retention_amount?: number
+          retention_rate?: number
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_results_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_results_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          activity_code: string | null
+          cnpj: string
+          company_name: string
+          created_at: string
+          id: string
+          trade_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          activity_code?: string | null
+          cnpj: string
+          company_name: string
+          created_at?: string
+          id?: string
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activity_code?: string | null
+          cnpj?: string
+          company_name?: string
+          created_at?: string
+          id?: string
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          client_id: string
+          created_at: string
+          description: string | null
+          document_number: string | null
+          id: string
+          payment_date: string
+          supplier_id: string
+        }
+        Insert: {
+          amount: number
+          client_id: string
+          created_at?: string
+          description?: string | null
+          document_number?: string | null
+          id?: string
+          payment_date: string
+          supplier_id: string
+        }
+        Update: {
+          amount?: number
+          client_id?: string
+          created_at?: string
+          description?: string | null
+          document_number?: string | null
+          id?: string
+          payment_date?: string
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          activity_code: string | null
+          activity_description: string | null
+          cnpj: string
+          company_name: string
+          created_at: string
+          id: string
+          tax_regime: string | null
+          trade_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          activity_code?: string | null
+          activity_description?: string | null
+          cnpj: string
+          company_name: string
+          created_at?: string
+          id?: string
+          tax_regime?: string | null
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activity_code?: string | null
+          activity_description?: string | null
+          cnpj?: string
+          company_name?: string
+          created_at?: string
+          id?: string
+          tax_regime?: string | null
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tax_rates: {
+        Row: {
+          activity_code: string
+          created_at: string
+          description: string | null
+          id: string
+          retention_rate: number
+          updated_at: string
+        }
+        Insert: {
+          activity_code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          retention_rate: number
+          updated_at?: string
+        }
+        Update: {
+          activity_code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          retention_rate?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
