@@ -1,15 +1,13 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
-import { FileUpload, Upload } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
-// Create mock audit records for demo purposes
 const mockAuditRecords = [
   {
     id: '1',
@@ -87,7 +85,6 @@ const AuditPage = () => {
     toast({
       title: "Arquivo enviado com sucesso",
       description: "Iniciando processamento de auditoria.",
-      // Fix the TypeScript error by using a valid variant
       variant: "default"
     });
     
@@ -114,7 +111,7 @@ const AuditPage = () => {
               className="flex-1"
             />
             <Button type="submit" disabled={!file}>
-              <FileUpload className="mr-2 h-4 w-4" />
+              <Upload className="mr-2 h-4 w-4" />
               Enviar
             </Button>
           </div>
