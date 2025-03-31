@@ -28,6 +28,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PaymentAuditDialog } from "@/components/payment-audit/PaymentAuditDialog";
+import { toast } from "sonner";
 
 const auditedPayments = [
   {
@@ -79,6 +81,8 @@ export function PaymentAuditPage() {
     to: addDays(new Date(), 30),
   });
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<any>(null);
 
   const filteredPayments = auditedPayments.filter(
     (payment) =>
@@ -101,6 +105,39 @@ export function PaymentAuditPage() {
   const inconsistencies = auditedPayments.filter(
     (payment) => payment.status === "Inconsistência"
   ).length;
+
+  const handleSubmit = async (data: any) => {
+    try {
+      // TODO: Implementar integração com a API
+      console.log("Dados do formulário:", data);
+      toast.success(
+        selectedPayment
+          ? "Auditoria atualizada com sucesso!"
+          : "Nova auditoria registrada com sucesso!"
+      );
+      setDialogOpen(false);
+      setSelectedPayment(null);
+    } catch (error) {
+      console.error("Erro ao salvar auditoria:", error);
+      toast.error("Erro ao salvar auditoria");
+    }
+  };
+
+  const handleEdit = (payment: any) => {
+    setSelectedPayment(payment);
+    setDialogOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      // TODO: Implementar integração com a API
+      console.log("Excluindo auditoria:", id);
+      toast.success("Auditoria excluída com sucesso!");
+    } catch (error) {
+      console.error("Erro ao excluir auditoria:", error);
+      toast.error("Erro ao excluir auditoria");
+    }
+  };
 
   return (
     <div className="p-6">
@@ -210,7 +247,7 @@ export function PaymentAuditPage() {
                 <SelectItem value="Pendente">Pendente</SelectItem>
               </SelectContent>
             </Select>
-            <Button>Nova Auditoria</Button>
+            <Button onClick={() => setDialogOpen(true)}>Nova Auditoria</Button>
             <Button variant="outline">Exportar</Button>
           </div>
 
@@ -256,10 +293,19 @@ export function PaymentAuditPage() {
                       <Button variant="ghost" size="sm">
                         Visualizar
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEdit(payment)}
+                      >
                         Editar
                       </Button>
-                      <Button variant="ghost" size="sm" className="text-red-600">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600"
+                        onClick={() => handleDelete(payment.id)}
+                      >
                         Excluir
                       </Button>
                     </div>
@@ -302,6 +348,13 @@ export function PaymentAuditPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <PaymentAuditDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSubmit={handleSubmit}
+        initialData={selectedPayment}
+      />
     </div>
   );
 } 
