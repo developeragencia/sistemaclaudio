@@ -160,7 +160,6 @@ function App() {
               <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
-              <Route path="/audit-retention" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               
               <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />

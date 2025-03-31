@@ -374,21 +374,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </SidebarMenuItem>
                       
                       <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/tax-rates') ? 'menu-item-active' : ''}>
-                          <Link to="/tax-rates" className="flex items-center gap-2">
-                            <Calculator size={18} />
-                            <span>Alíquotas Fiscais</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                      
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/audit-retention') ? 'menu-item-active' : ''}>
-                          <Link to="/audit-retention" className="flex items-center gap-2">
-                            <Scan size={18} />
-                            <span>Auditoria e Retenções</span>
-                          </Link>
-                        </SidebarMenuButton>
+                         <SidebarMenuButton asChild className={isActiveRoute('/tax-rates') ? 'menu-item-active' : ''}>
+                           <Link to="/tax-rates" className="flex items-center gap-2">
+                             <Calculator size={18} />
+                             <span>Alíquotas Fiscais</span>
+                           </Link>
+                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
