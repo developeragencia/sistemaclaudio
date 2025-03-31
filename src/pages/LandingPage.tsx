@@ -29,7 +29,7 @@ const LandingPage = () => {
         <div className="hero-container relative">
           <div className="grid-pattern opacity-70"></div>
           
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-white/80 z-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-white/80 z-0"></div>
           
           <div className="hero-content z-10 pt-24">
             <div className="mb-10 animate-fade-in">
@@ -99,7 +99,7 @@ const LandingPage = () => {
         </div>
       </main>
       
-      <footer className="py-6 bg-gradient-to-r from-gray-100 to-gray-50 border-t border-gray-200">
+      <footer className="py-6 bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <Logo size="sm" animated={false} className="mx-auto mb-4" />
           <p className="text-gray-500 text-sm">
