@@ -19,11 +19,11 @@ Deno.serve(async (req) => {
 
   try {
     // Get the request body
-    const { payment_ids } = await req.json();
+    const { clientId, paymentIds = [] } = await req.json();
     
-    if (!payment_ids || !Array.isArray(payment_ids) || payment_ids.length === 0) {
+    if (!clientId) {
       return new Response(
-        JSON.stringify({ error: 'Valid payment_ids array is required' }),
+        JSON.stringify({ error: 'Client ID is required' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400 
@@ -31,80 +31,97 @@ Deno.serve(async (req) => {
       );
     }
 
-    const auditResults = [];
-    const errors = [];
-
-    // Process each payment
-    for (const paymentId of payment_ids) {
-      // Fetch payment details with supplier information
-      const { data: payment, error: paymentError } = await supabase
-        .from('payments')
-        .select(`
+    // Get payments for audit
+    const { data: payments, error: paymentsError } = await supabase
+      .from('payments')
+      .select(`
+        id,
+        amount,
+        payment_date,
+        document_number,
+        supplier_id,
+        suppliers(
           id,
-          amount,
-          supplier_id,
-          suppliers!inner (
-            id,
-            activity_code
-          )
-        `)
-        .eq('id', paymentId)
-        .single();
-        
-      if (paymentError) {
-        errors.push({ payment_id: paymentId, error: paymentError.message });
+          cnpj,
+          company_name,
+          activity_code
+        )
+      `)
+      .eq('client_id', clientId)
+      .in('id', paymentIds.length > 0 ? paymentIds : ['00000000-0000-0000-0000-000000000000']);
+    
+    if (paymentsError) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to fetch payments', details: paymentsError }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      );
+    }
+
+    // Process each payment for audit
+    const auditResults = [];
+    
+    for (const payment of payments) {
+      const supplierActivityCode = payment.suppliers?.activity_code;
+      
+      if (!supplierActivityCode) {
+        auditResults.push({
+          paymentId: payment.id,
+          error: 'Supplier activity code not found'
+        });
         continue;
       }
       
-      // Find applicable tax rate for the supplier's activity
+      // Get tax rate for supplier activity
       const { data: taxRate, error: taxRateError } = await supabase
         .from('tax_rates')
-        .select('*')
-        .eq('activity_code', payment.suppliers.activity_code)
+        .select('retention_rate')
+        .eq('activity_code', supplierActivityCode)
         .maybeSingle();
-        
-      if (taxRateError) {
-        errors.push({ payment_id: paymentId, error: taxRateError.message });
+      
+      if (taxRateError || !taxRate) {
+        auditResults.push({
+          paymentId: payment.id,
+          error: 'Tax rate not found for supplier activity'
+        });
         continue;
       }
       
-      // Use default tax rate if none found for this activity code
-      const retentionRate = taxRate ? taxRate.retention_rate : 0;
-      
-      // Calculate retention amount
-      const retentionAmount = (payment.amount * retentionRate) / 100;
-      const netAmount = payment.amount - retentionAmount;
+      const retentionRate = taxRate.retention_rate;
+      const originalAmount = parseFloat(payment.amount);
+      const retentionAmount = originalAmount * (retentionRate / 100);
+      const netAmount = originalAmount - retentionAmount;
       
       // Create audit result
-      const auditData = {
-        payment_id: payment.id,
-        supplier_id: payment.supplier_id,
-        original_amount: payment.amount,
-        retention_rate: retentionRate,
-        retention_amount: retentionAmount,
-        net_amount: netAmount
-      };
-      
-      // Save audit result to database
       const { data: auditResult, error: auditError } = await supabase
         .from('audit_results')
-        .insert(auditData)
-        .select('*')
+        .insert({
+          payment_id: payment.id,
+          supplier_id: payment.supplier_id,
+          original_amount: originalAmount,
+          retention_rate: retentionRate,
+          retention_amount: retentionAmount,
+          net_amount: netAmount
+        })
+        .select()
         .single();
-        
-      if (auditError) {
-        errors.push({ payment_id: paymentId, error: auditError.message });
-        continue;
-      }
       
-      auditResults.push(auditResult);
+      if (auditError) {
+        auditResults.push({
+          paymentId: payment.id,
+          error: 'Failed to create audit result'
+        });
+      } else {
+        auditResults.push(auditResult);
+      }
     }
     
     return new Response(
       JSON.stringify({ 
         results: auditResults,
-        errors: errors,
-        message: `Processed ${auditResults.length} payments with ${errors.length} errors`
+        message: 'Audit processing completed'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -113,7 +130,7 @@ Deno.serve(async (req) => {
     );
     
   } catch (error) {
-    console.error('Error processing audit:', error);
+    console.error('Error processing request:', error);
     
     return new Response(
       JSON.stringify({ 
