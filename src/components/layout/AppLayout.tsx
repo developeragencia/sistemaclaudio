@@ -1,14 +1,7 @@
-
 import React, { useState } from 'react';
-import { 
-  Sidebar, 
-  SidebarHeader,
-  SidebarFooter,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
 import { useAuth } from '@/contexts/AuthContext';
-import Logo from '@/components/Logo';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Nav } from './nav';
 import SidebarUserProfile from './SidebarUserProfile';
 import SidebarContent from './SidebarContent';
 import AppHeader from './AppHeader';
@@ -33,36 +26,38 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="h-screen flex w-full">
-        <Sidebar variant="sidebar" collapsible="icon" className="border-r">
-          <SidebarHeader className="p-4">
-            <div className="flex items-center justify-center">
-              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} textOnly={true} />
-            </div>
-          </SidebarHeader>
-
-          <SidebarContent />
-
-          <SidebarFooter className="p-4 border-t">
+    <div className="h-screen flex w-full">
+      <div className="w-64 border-r bg-background">
+        <div className="flex flex-col h-full">
+          <div className="p-4">
+            <h1 className="text-xl font-bold">Sistema Claudio</h1>
+          </div>
+          
+          <Nav className="px-4" />
+          
+          <div className="flex-1 overflow-y-auto">
+            <SidebarContent />
+          </div>
+          
+          <div className="p-4 border-t">
             <SidebarUserProfile getInitials={getInitials} />
-          </SidebarFooter>
-        </Sidebar>
-
-        <div className="flex-1 flex flex-col h-screen overflow-hidden">
-          <AppHeader 
-            clientDropdownOpen={clientDropdownOpen}
-            setClientDropdownOpen={setClientDropdownOpen}
-            getInitials={getInitials}
-          />
-
-          <main className="flex-1 p-4 md:p-6 overflow-y-auto bg-gray-50">
-            <ActiveClientNotification setClientDropdownOpen={setClientDropdownOpen} />
-            {children}
-          </main>
+          </div>
         </div>
       </div>
-    </SidebarProvider>
+
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <AppHeader 
+          clientDropdownOpen={clientDropdownOpen}
+          setClientDropdownOpen={setClientDropdownOpen}
+          getInitials={getInitials}
+        />
+
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto bg-gray-50">
+          <ActiveClientNotification setClientDropdownOpen={setClientDropdownOpen} />
+          {children}
+        </main>
+      </div>
+    </div>
   );
 };
 
