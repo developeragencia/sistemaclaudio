@@ -1,0 +1,49 @@
+{
+  "name": "Lovable - Sistema de Gestão Tributária",
+  "short_name": "Lovable",
+  "description": "Sistema completo para gestão tributária, recuperação de impostos e consultoria fiscal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Acesse o dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/shortcuts/dashboard.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Clientes",
+      "short_name": "Clientes",
+      "description": "Gerenciar clientes",
+      "url": "/clients",
+      "icons": [{ "src": "/shortcuts/clients.png", "sizes": "96x96" }]
+    }
+  ]
+} 
