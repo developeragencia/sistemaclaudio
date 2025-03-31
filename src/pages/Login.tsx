@@ -127,20 +127,13 @@ const Login = () => {
           <p className="text-xs mt-2 text-gray-600">Senha: password</p>
         </div>
         
-        <div className="mt-12 pt-6 border-t border-gray-200 text-center animate-fade-in animate-delay-3">
-          <p className="text-gray-500 text-sm">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
-          <p className="mt-1 text-gray-500 text-sm">
+        <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
+          <div>© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
+          <div className="mt-1">
             Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
-          </p>
-        </div>
+          </div>
+        </footer>
       </div>
-
-      <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
-        <div>© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
-        <div className="mt-1">
-          Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
-        </div>
-      </footer>
     </div>
   );
 };
