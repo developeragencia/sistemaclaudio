@@ -29,7 +29,14 @@ const Login = () => {
           title: "Login realizado com sucesso",
           description: "Bem-vindo ao Sistema Cláudio Figueiredo",
         });
-        navigate('/');
+        
+        // Corrigindo a navegação - verificar se o usuário é admin
+        // e redirecionar para o painel administrativo
+        if (email === 'admin@sistemaclaudiofigueiredo.com') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         toast({
           title: "Falha no login",

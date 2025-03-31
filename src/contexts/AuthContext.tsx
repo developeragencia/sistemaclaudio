@@ -126,7 +126,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Simulação de login para desenvolvimento
     const mockUser = MOCK_USERS[email];
     
-    // Updated the password check for the admin user
     if (mockUser) {
       if (email === 'admin@sistemaclaudiofigueiredo.com' && password === 'admin123') {
         setUser(mockUser);
