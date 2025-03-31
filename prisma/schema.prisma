@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Supplier {
+  id                    String        @id @default(uuid())
+  cnpj                  String        @unique
+  razao_social          String
+  nome_fantasia         String?
+  atividade_principal   Json[]
+  data_situacao        String
+  tipo                 String
+  porte                String
+  natureza_juridica    String
+  atividades_secundarias Json[]
+  endereco             Json
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
+  payments             Payment[]
+  auditResults         AuditResult[]
+
+  @@map("suppliers")
+}
+
+model Payment {
+  id            String      @id @default(uuid())
+  client_id     String
+  supplier_id   String
+  cnpj_supplier String
+  payment_date  DateTime
+  payment_value Float
+  description   String
+  invoice_number String?
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  supplier      Supplier    @relation(fields: [supplier_id], references: [id])
+  auditResults  AuditResult[]
+
+  @@map("payments")
+}
+
+model TaxRate {
+  id                   String       @id @default(uuid())
+  activity_code        String      @unique
+  activity_description String
+  tax_rate            Float
+  tax_type            String
+  minimum_value       Float
+  created_at          DateTime     @default(now())
+  updated_at          DateTime     @updatedAt
+  auditResults        AuditResult[]
+
+  @@map("tax_rates")
+}
+
+model AuditResult {
+  id             String    @id @default(uuid())
+  payment_id     String
+  supplier_id    String
+  tax_rate_id    String?
+  original_value Float
+  tax_rate       Float
+  tax_value      Float
+  tax_type       String
+  audit_date     DateTime
+  status         String
+  observations   String?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  payment        Payment   @relation(fields: [payment_id], references: [id])
+  supplier       Supplier  @relation(fields: [supplier_id], references: [id])
+  taxRate        TaxRate?  @relation(fields: [tax_rate_id], references: [id])
+
+  @@map("audit_results")
+} 
