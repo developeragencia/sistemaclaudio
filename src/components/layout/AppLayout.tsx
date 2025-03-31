@@ -28,7 +28,18 @@ import {
   Calculator,
   UserCog,
   FileSearch,
-  History
+  History,
+  Shield,
+  KeyRound,
+  HardDrive,
+  Network,
+  Workflow,
+  BookOpen,
+  Globe,
+  FileEdit,
+  HeartHandshake,
+  HelpCircle,
+  Phone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -85,6 +96,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </SidebarHeader>
 
           <SidebarContent>
+            {/* Navegação para todos os usuários */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-gray-400">Navegação</SidebarGroupLabel>
               <SidebarGroupContent>
@@ -146,40 +158,183 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </SidebarGroupContent>
             </SidebarGroup>
 
+            {/* Menu administrativo - mostrado apenas para usuários com papel admin */}
             {user?.role === 'admin' && (
-              <SidebarGroup>
-                <SidebarGroupLabel className="text-gray-400">Administração</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild className={isActiveRoute('/users') ? 'menu-item-active' : ''}>
-                        <Link to="/users" className="flex items-center gap-2">
-                          <Users size={18} />
-                          <span>Usuários</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild className={isActiveRoute('/settings') ? 'menu-item-active' : ''}>
-                        <Link to="/settings" className="flex items-center gap-2">
-                          <Settings size={18} />
-                          <span>Configurações</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild className={isActiveRoute('/logs') ? 'menu-item-active' : ''}>
-                        <Link to="/logs" className="flex items-center gap-2">
-                          <History size={18} />
-                          <span>Logs do Sistema</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
+              <>
+                {/* Principal */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Principal</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/admin-dashboard') ? 'menu-item-active' : ''}>
+                          <Link to="/admin-dashboard" className="flex items-center gap-2">
+                            <BarChart3 size={18} />
+                            <span>Painel de Controle</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/settings') ? 'menu-item-active' : ''}>
+                          <Link to="/settings" className="flex items-center gap-2">
+                            <Settings size={18} />
+                            <span>Configurações</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Módulos Principais */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Módulos Principais</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/users') ? 'menu-item-active' : ''}>
+                          <Link to="/users" className="flex items-center gap-2">
+                            <Users size={18} />
+                            <span>Usuários</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/workflows') ? 'menu-item-active' : ''}>
+                          <Link to="/workflows" className="flex items-center gap-2">
+                            <Workflow size={18} />
+                            <span>Fluxos de Trabalho</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/knowledge-base') ? 'menu-item-active' : ''}>
+                          <Link to="/knowledge-base" className="flex items-center gap-2">
+                            <BookOpen size={18} />
+                            <span>Base de Conhecimento</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Segurança & Auditoria */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Segurança & Auditoria</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/security') ? 'menu-item-active' : ''}>
+                          <Link to="/security" className="flex items-center gap-2">
+                            <Shield size={18} />
+                            <span>Segurança</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/access-control') ? 'menu-item-active' : ''}>
+                          <Link to="/access-control" className="flex items-center gap-2">
+                            <KeyRound size={18} />
+                            <span>Controle de Acesso</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/logs') ? 'menu-item-active' : ''}>
+                          <Link to="/logs" className="flex items-center gap-2">
+                            <History size={18} />
+                            <span>Logs do Sistema</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Operacional */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Operacional</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/backup') ? 'menu-item-active' : ''}>
+                          <Link to="/backup" className="flex items-center gap-2">
+                            <HardDrive size={18} />
+                            <span>Backup & Restauração</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/integrations') ? 'menu-item-active' : ''}>
+                          <Link to="/integrations" className="flex items-center gap-2">
+                            <Network size={18} />
+                            <span>Integrações</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Site e Conteúdo */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Site e Conteúdo</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/website') ? 'menu-item-active' : ''}>
+                          <Link to="/website" className="flex items-center gap-2">
+                            <Globe size={18} />
+                            <span>Website</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/content') ? 'menu-item-active' : ''}>
+                          <Link to="/content" className="flex items-center gap-2">
+                            <FileEdit size={18} />
+                            <span>Gerenciar Conteúdo</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Suporte */}
+                <SidebarGroup>
+                  <SidebarGroupLabel className="text-gray-400">Suporte</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/support-tickets') ? 'menu-item-active' : ''}>
+                          <Link to="/support-tickets" className="flex items-center gap-2">
+                            <HeartHandshake size={18} />
+                            <span>Tickets de Suporte</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/help') ? 'menu-item-active' : ''}>
+                          <Link to="/help" className="flex items-center gap-2">
+                            <HelpCircle size={18} />
+                            <span>Ajuda</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/contact') ? 'menu-item-active' : ''}>
+                          <Link to="/contact" className="flex items-center gap-2">
+                            <Phone size={18} />
+                            <span>Contato</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </>
             )}
           </SidebarContent>
 
