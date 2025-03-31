@@ -1,323 +1,429 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { toast } from 'sonner';
-import { Loader2, Plus, Save, Trash2 } from 'lucide-react';
+import { Pencil, Save, Plus, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useToast } from '@/components/ui/use-toast';
 
-const formSchema = z.object({
-  activity_code: z.string().min(1, 'Código de atividade é obrigatório'),
-  retention_rate: z.number()
-    .min(0, 'Taxa deve ser no mínimo 0%')
-    .max(100, 'Taxa deve ser no máximo 100%'),
-  description: z.string().optional(),
-});
+// Define the type for tax rates
+interface TaxRate {
+  id: string;
+  activity_code: string;
+  description: string;
+  retention_rate: number;
+  created_at?: string;
+  updated_at?: string;
+}
 
 const TaxRatesPage = () => {
-  const [taxRates, setTaxRates] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [taxRates, setTaxRates] = useState<TaxRate[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      activity_code: '',
-      retention_rate: 0,
-      description: '',
-    },
+  // Form state for new/editing tax rate
+  const [formData, setFormData] = useState<{
+    activity_code: string;
+    description: string;
+    retention_rate: number;
+  }>({
+    activity_code: '',
+    description: '',
+    retention_rate: 0,
   });
 
-  // Fetch tax rates on component mount
-  useEffect(() => {
-    fetchTaxRates();
-  }, []);
-
+  // Load tax rates from database
   const fetchTaxRates = async () => {
     setLoading(true);
-    
     try {
       const { data, error } = await supabase
         .from('tax_rates')
         .select('*')
-        .order('activity_code');
-        
-      if (error) {
-        throw error;
-      }
-      
+        .order('activity_code', { ascending: true });
+
+      if (error) throw error;
       setTaxRates(data || []);
     } catch (error) {
       console.error('Error fetching tax rates:', error);
-      toast.error('Falha ao carregar taxas de retenção');
+      toast({
+        title: 'Erro ao carregar alíquotas',
+        description: 'Não foi possível carregar as alíquotas. Tente novamente mais tarde.',
+        variant: 'destructive'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEditTaxRate = (taxRate: any) => {
-    form.reset({
-      activity_code: taxRate.activity_code,
-      retention_rate: taxRate.retention_rate,
-      description: taxRate.description || '',
-    });
+  useEffect(() => {
+    fetchTaxRates();
+  }, []);
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'retention_rate' ? parseFloat(value) || 0 : value
+    }));
+  };
+
+  // Start editing a tax rate
+  const handleEdit = (taxRate: TaxRate) => {
     setEditingId(taxRate.id);
-    setDialogOpen(true);
-  };
-
-  const handleAddNew = () => {
-    form.reset({
-      activity_code: '',
-      retention_rate: 0,
-      description: '',
+    setFormData({
+      activity_code: taxRate.activity_code,
+      description: taxRate.description,
+      retention_rate: taxRate.retention_rate
     });
-    setEditingId(null);
-    setDialogOpen(true);
   };
 
-  const handleDeleteTaxRate = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta alíquota?')) {
-      return;
+  // Cancel editing or adding
+  const handleCancel = () => {
+    setEditingId(null);
+    setIsAddingNew(false);
+    setFormData({
+      activity_code: '',
+      description: '',
+      retention_rate: 0
+    });
+  };
+
+  // Add new tax rate
+  const handleAdd = async () => {
+    try {
+      // Fix TypeScript error: Ensure all required fields have values
+      if (!formData.activity_code || formData.retention_rate === undefined) {
+        toast({
+          title: 'Campos obrigatórios',
+          description: 'Código de atividade e alíquota são obrigatórios.',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('tax_rates')
+        .insert({
+          activity_code: formData.activity_code,
+          description: formData.description,
+          retention_rate: formData.retention_rate
+        })
+        .select();
+
+      if (error) throw error;
+      
+      toast({
+        title: 'Alíquota adicionada',
+        description: 'Nova alíquota foi adicionada com sucesso.',
+        variant: 'default'
+      });
+      
+      setIsAddingNew(false);
+      setFormData({
+        activity_code: '',
+        description: '',
+        retention_rate: 0
+      });
+      
+      // Refresh the list
+      fetchTaxRates();
+    } catch (error) {
+      console.error('Error adding tax rate:', error);
+      toast({
+        title: 'Erro ao adicionar',
+        description: 'Não foi possível adicionar a alíquota. Tente novamente.',
+        variant: 'destructive'
+      });
     }
+  };
+
+  // Update existing tax rate
+  const handleUpdate = async () => {
+    if (!editingId) return;
+    
+    try {
+      // Fix TypeScript error: Ensure all required fields have values
+      if (!formData.activity_code || formData.retention_rate === undefined) {
+        toast({
+          title: 'Campos obrigatórios',
+          description: 'Código de atividade e alíquota são obrigatórios.',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('tax_rates')
+        .update({
+          activity_code: formData.activity_code,
+          description: formData.description,
+          retention_rate: formData.retention_rate
+        })
+        .eq('id', editingId);
+
+      if (error) throw error;
+      
+      toast({
+        title: 'Alíquota atualizada',
+        description: 'Alíquota foi atualizada com sucesso.',
+        variant: 'default'
+      });
+      
+      setEditingId(null);
+      setFormData({
+        activity_code: '',
+        description: '',
+        retention_rate: 0
+      });
+      
+      // Refresh the list
+      fetchTaxRates();
+    } catch (error) {
+      console.error('Error updating tax rate:', error);
+      toast({
+        title: 'Erro ao atualizar',
+        description: 'Não foi possível atualizar a alíquota. Tente novamente.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  // Delete tax rate
+  const handleDelete = async (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir esta alíquota?')) return;
     
     try {
       const { error } = await supabase
         .from('tax_rates')
         .delete()
         .eq('id', id);
-        
-      if (error) {
-        throw error;
-      }
+
+      if (error) throw error;
       
-      toast.success('Alíquota excluída com sucesso');
+      toast({
+        title: 'Alíquota excluída',
+        description: 'Alíquota foi excluída com sucesso.',
+        variant: 'default'
+      });
+      
+      // Refresh the list
       fetchTaxRates();
     } catch (error) {
       console.error('Error deleting tax rate:', error);
-      toast.error('Falha ao excluir alíquota');
+      toast({
+        title: 'Erro ao excluir',
+        description: 'Não foi possível excluir a alíquota. Tente novamente.',
+        variant: 'destructive'
+      });
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      if (editingId) {
-        // Update existing tax rate
-        const { error } = await supabase
-          .from('tax_rates')
-          .update(values)
-          .eq('id', editingId);
-          
-        if (error) {
-          throw error;
-        }
-        
-        toast.success('Alíquota atualizada com sucesso');
-      } else {
-        // Create new tax rate
-        const { error } = await supabase
-          .from('tax_rates')
-          .insert(values);
-          
-        if (error) {
-          throw error;
-        }
-        
-        toast.success('Alíquota criada com sucesso');
-      }
-      
-      setDialogOpen(false);
-      fetchTaxRates();
-    } catch (error) {
-      console.error('Error saving tax rate:', error);
-      toast.error('Falha ao salvar alíquota');
-    }
-  };
+  // Filter tax rates based on search
+  const filteredTaxRates = taxRates.filter(rate => 
+    rate.activity_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    rate.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Alíquotas de Retenção</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Alíquotas de Retenção</h1>
         <p className="text-muted-foreground">
-          Gerencie as alíquotas de retenção fiscal para diferentes códigos de atividade
+          Gerencie as alíquotas de retenção fiscal para diferentes códigos de atividade.
         </p>
       </div>
-
       <Separator />
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Alíquotas Cadastradas</h2>
-        <div className="flex space-x-2">
-          <Button
-            onClick={fetchTaxRates}
-            variant="outline"
-            size="sm"
-          >
-            Atualizar
-          </Button>
-          <Button
-            onClick={handleAddNew}
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Nova Alíquota
-          </Button>
-        </div>
-      </div>
-
       <Card>
-        <CardContent className="p-0">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle>Tabela de Alíquotas</CardTitle>
+              <CardDescription>
+                Consulte, adicione e edite alíquotas por código de atividade.
+              </CardDescription>
             </div>
-          ) : taxRates.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Código de Atividade</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead className="text-right">Alíquota</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {taxRates.map((taxRate) => (
-                  <TableRow key={taxRate.id}>
-                    <TableCell className="font-medium">{taxRate.activity_code}</TableCell>
-                    <TableCell>{taxRate.description || '-'}</TableCell>
-                    <TableCell className="text-right">{taxRate.retention_rate}%</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          onClick={() => handleEditTaxRate(taxRate)}
-                          variant="ghost"
-                          size="sm"
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          onClick={() => handleDeleteTaxRate(taxRate.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="flex flex-col justify-center items-center h-64 text-muted-foreground">
-              <p>Nenhuma alíquota cadastrada</p>
-              <Button
-                onClick={handleAddNew}
-                variant="outline"
-                className="mt-4"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar Alíquota
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            <Button onClick={() => {
+              setIsAddingNew(true);
+              setEditingId(null);
+              setFormData({
+                activity_code: '',
+                description: '',
+                retention_rate: 0
+              });
+            }} disabled={isAddingNew || editingId !== null}>
+              <Plus className="mr-2 h-4 w-4" />
+              Nova Alíquota
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <Input
+              placeholder="Buscar por código ou descrição..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-md"
+            />
+          </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingId ? 'Editar Alíquota' : 'Nova Alíquota'}</DialogTitle>
-            <DialogDescription>
-              {editingId 
-                ? 'Atualize os dados da alíquota de retenção'
-                : 'Preencha os dados para criar uma nova alíquota de retenção'}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="activity_code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Código de Atividade</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: 6201-5/01" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Código CNAE da atividade econômica
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="retention_rate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alíquota de Retenção (%)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.01"
-                        min="0"
-                        max="100"
-                        {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Percentual de retenção fiscal a ser aplicado
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descrição</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Descrição da atividade" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Descrição opcional para identificação da atividade
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">Cancelar</Button>
-                </DialogClose>
-                <Button type="submit">
-                  <Save className="h-4 w-4 mr-2" />
+          {isAddingNew && (
+            <div className="bg-muted/50 p-4 rounded-lg mb-6 border">
+              <h3 className="text-lg font-medium mb-4">Nova Alíquota</h3>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <Label htmlFor="activity_code">Código de Atividade</Label>
+                  <Input
+                    id="activity_code"
+                    name="activity_code"
+                    value={formData.activity_code}
+                    onChange={handleInputChange}
+                    placeholder="Ex: 1234-5/67"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="description">Descrição</Label>
+                  <Input
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Consultoria Empresarial"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="retention_rate">Alíquota (%)</Label>
+                  <Input
+                    id="retention_rate"
+                    name="retention_rate"
+                    type="number"
+                    step="0.01"
+                    value={formData.retention_rate}
+                    onChange={handleInputChange}
+                    placeholder="Ex: 1.5"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
+                <Button variant="outline" onClick={handleCancel}>Cancelar</Button>
+                <Button onClick={handleAdd}>
+                  <Save className="mr-2 h-4 w-4" />
                   Salvar
                 </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+              </div>
+            </div>
+          )}
+
+          <div className="border rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="py-3 px-4 text-left">Código</th>
+                  <th className="py-3 px-4 text-left">Descrição</th>
+                  <th className="py-3 px-4 text-right">Alíquota (%)</th>
+                  <th className="py-3 px-4 text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {loading ? (
+                  <tr>
+                    <td colSpan={4} className="py-10 text-center">
+                      Carregando alíquotas...
+                    </td>
+                  </tr>
+                ) : filteredTaxRates.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-10 text-center">
+                      {searchTerm ? 'Nenhuma alíquota encontrada para sua busca.' : 'Nenhuma alíquota cadastrada.'}
+                    </td>
+                  </tr>
+                ) : (
+                  filteredTaxRates.map(rate => (
+                    <tr key={rate.id}>
+                      {editingId === rate.id ? (
+                        <>
+                          <td className="py-3 px-4">
+                            <Input
+                              name="activity_code"
+                              value={formData.activity_code}
+                              onChange={handleInputChange}
+                              className="max-w-xs"
+                            />
+                          </td>
+                          <td className="py-3 px-4">
+                            <Input
+                              name="description"
+                              value={formData.description}
+                              onChange={handleInputChange}
+                            />
+                          </td>
+                          <td className="py-3 px-4">
+                            <Input
+                              name="retention_rate"
+                              type="number"
+                              step="0.01"
+                              value={formData.retention_rate}
+                              onChange={handleInputChange}
+                              className="max-w-xs text-right"
+                            />
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <Button variant="outline" size="sm" onClick={handleCancel}>
+                                Cancelar
+                              </Button>
+                              <Button size="sm" onClick={handleUpdate}>
+                                <Save className="mr-1 h-3 w-3" />
+                                Salvar
+                              </Button>
+                            </div>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="py-3 px-4">{rate.activity_code}</td>
+                          <td className="py-3 px-4">{rate.description}</td>
+                          <td className="py-3 px-4 text-right">{rate.retention_rate.toFixed(2)}%</td>
+                          <td className="py-3 px-4">
+                            <div className="flex justify-center gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEdit(rate)}
+                                disabled={isAddingNew || editingId !== null}
+                              >
+                                <Pencil className="h-3 w-3" />
+                                <span className="sr-only">Editar</span>
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDelete(rate.id)}
+                                disabled={isAddingNew || editingId !== null}
+                                className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                                <span className="sr-only">Excluir</span>
+                              </Button>
+                            </div>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

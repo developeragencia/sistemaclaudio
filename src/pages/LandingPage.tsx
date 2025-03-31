@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-gray-800 relative pb-16">
+    <div className="min-h-screen flex flex-col bg-white text-gray-800 relative">
       <div className="grid-pattern"></div>
       
       <div className="flex-grow flex flex-col items-center justify-center px-4 py-10">

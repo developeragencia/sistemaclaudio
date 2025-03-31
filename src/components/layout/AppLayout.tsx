@@ -87,7 +87,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
   return (
     <SidebarProvider>
-      <div className="h-screen flex w-full overflow-hidden">
+      <div className="h-screen flex w-full">
         <Sidebar variant="sidebar" collapsible="icon" className="border-r">
           <SidebarHeader className="p-4">
             <div className="flex items-center justify-center">
@@ -96,7 +96,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </SidebarHeader>
 
           <SidebarContent className="overflow-y-auto">
-            {/* Navegação para todos os usuários */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-sm font-medium text-gray-400">Navegação</SidebarGroupLabel>
               <SidebarGroupContent>
@@ -158,10 +157,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </SidebarGroupContent>
             </SidebarGroup>
 
-            {/* Menu administrativo - mostrado apenas para usuários com papel admin */}
             {user?.role === 'admin' && (
               <>
-                {/* Principal */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Principal</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -186,7 +183,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Módulos Principais */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Módulos Principais</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -219,7 +215,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Segurança & Auditoria */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Segurança & Auditoria</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -252,7 +247,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Operacional */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Operacional</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -277,7 +271,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Site e Conteúdo */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Site e Conteúdo</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -302,7 +295,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Suporte */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Suporte</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -451,7 +443,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             </div>
           </header>
 
-          <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-50">
+          <main className="flex-1 p-4 md:p-6 overflow-y-auto bg-gray-50">
             {!activeClient && user?.role !== 'client' && (
               <Card className="mb-4 p-4 border-orange-300 bg-orange-50 border-l-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
