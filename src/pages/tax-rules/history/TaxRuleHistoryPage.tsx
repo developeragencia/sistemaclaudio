@@ -85,14 +85,7 @@ export default function TaxRuleHistoryPage() {
   const deletions = filteredHistory.filter(item => item.changeType === "delete").length;
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Histórico de Alterações</h1>
-        <p className="text-muted-foreground">
-          Visualize o histórico de alterações nas regras tributárias
-        </p>
-      </div>
-
+    <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -40,14 +40,6 @@ export function Nav({ className, ...props }: NavProps) {
       href: "/tax-rules",
       label: "Regras Tributárias",
     },
-    {
-      href: "/tax-rules/history",
-      label: "Histórico de Regras",
-    },
-    {
-      href: "/tax-rules/settings",
-      label: "Configurações de Regras",
-    },
   ];
 
   return (
@@ -61,7 +53,8 @@ export function Nav({ className, ...props }: NavProps) {
           to={route.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            location.pathname === route.href
+            location.pathname === route.href ||
+            (route.href !== "/" && location.pathname.startsWith(route.href))
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start"
