@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Sidebar, 
@@ -67,6 +68,7 @@ import { useAuth, Client } from '@/contexts/AuthContext';
 import { Separator } from '@/components/ui/separator';
 import { Card } from '@/components/ui/card';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from '@/components/Logo';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AppLayoutProps {
@@ -103,7 +105,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <Sidebar variant="sidebar" collapsible="icon" className="border-r">
           <SidebarHeader className="p-4">
             <div className="flex items-center justify-center">
-              <h1 className="text-lg font-bold">CLÁUDIO FIGUEIREDO</h1>
+              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} />
             </div>
           </SidebarHeader>
 
