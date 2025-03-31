@@ -48,10 +48,10 @@ export const useAuth = () => useContext(AuthContext);
 
 // Mock data para desenvolvimento
 const MOCK_USERS: Record<string, User> = {
-  'admin@example.com': {
+  'admin@sistemaclaudiofigueiredo.com': {
     id: '1',
     name: 'Admin Master',
-    email: 'admin@example.com',
+    email: 'admin@sistemaclaudiofigueiredo.com',
     role: 'admin',
   },
   'office@example.com': {
@@ -126,11 +126,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Simulação de login para desenvolvimento
     const mockUser = MOCK_USERS[email];
     
-    if (mockUser && password === 'password') {
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      return true;
+    // Updated the password check for the admin user
+    if (mockUser) {
+      if (email === 'admin@sistemaclaudiofigueiredo.com' && password === 'admin123') {
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        return true;
+      } else if (email !== 'admin@sistemaclaudiofigueiredo.com' && password === 'password') {
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        return true;
+      }
     }
     
     return false;

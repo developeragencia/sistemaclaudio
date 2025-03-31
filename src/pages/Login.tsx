@@ -117,7 +117,7 @@ const Login = () => {
           </p>
           <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-gray-600">
             <div>
-              <p>Admin: admin@example.com</p>
+              <p>Admin: admin@sistemaclaudiofigueiredo.com</p>
               <p>Escritório: office@example.com</p>
             </div>
             <div>
@@ -125,7 +125,8 @@ const Login = () => {
               <p>Representante: rep@example.com</p>
             </div>
           </div>
-          <p className="text-xs mt-2 text-gray-600">Senha: password</p>
+          <p className="text-xs mt-2 text-gray-600">Senha Admin: admin123</p>
+          <p className="text-xs text-gray-600">Senha demais usuários: password</p>
         </div>
         
         <footer className="mt-8 text-center text-xs text-gray-500">
