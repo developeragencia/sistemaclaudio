@@ -105,7 +105,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <Sidebar variant="sidebar" collapsible="icon" className="border-r">
           <SidebarHeader className="p-4">
             <div className="flex items-center justify-center">
-              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} />
+              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} textOnly={true} />
             </div>
           </SidebarHeader>
 

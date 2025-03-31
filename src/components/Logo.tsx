@@ -7,21 +7,18 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   withSubtitle?: boolean;
   className?: string;
+  textOnly?: boolean;
 }
 
 const Logo: React.FC<LogoProps> = ({ 
   animated = false, 
   size = 'md', 
   withSubtitle = true,
-  className = '' 
+  className = '',
+  textOnly = false
 }) => {
   const isMobile = useIsMobile();
   
-  // Use specific animation classes based on device type
-  const animationClasses = animated 
-    ? isMobile ? 'animate-fade-in' : 'animate-float' 
-    : '';
-
   const sizeClasses = {
     sm: 'h-8',
     md: 'h-12',
@@ -45,19 +42,21 @@ const Logo: React.FC<LogoProps> = ({
 
   return (
     <div className={`flex items-center ${className}`}>
-      <div className={`logo-container ${animationClasses}`}>
-        <img 
-          src="/lovable-uploads/b5ab68a5-181d-4e3b-b687-86db1d8e229c.png" 
-          alt="Cláudio Figueiredo Logo" 
-          className={`${sizeClasses[size]} ${animated && !isMobile ? 'animate-pulse' : ''}`}
-        />
-      </div>
-      <div className="ml-3 flex flex-col">
-        <h1 className={`logo-text ${textSizes[size]} ${animated ? 'animate-fade-in' : ''}`}>
+      {!textOnly && (
+        <div className="logo-container">
+          <img 
+            src="/lovable-uploads/b5ab68a5-181d-4e3b-b687-86db1d8e229c.png" 
+            alt="Cláudio Figueiredo Logo" 
+            className={`${sizeClasses[size]}`}
+          />
+        </div>
+      )}
+      <div className={`${!textOnly ? 'ml-3' : ''} flex flex-col`}>
+        <h1 className={`logo-text ${textSizes[size]}`}>
           CLÁUDIO FIGUEIREDO
         </h1>
         {withSubtitle && (
-          <span className={`logo-subtitle ${subtitleSizes[size]} ${animated ? 'animate-fade-in animate-delay-2' : ''}`}>
+          <span className={`logo-subtitle ${subtitleSizes[size]}`}>
             ADVOGADOS ASSOCIADOS
           </span>
         )}
