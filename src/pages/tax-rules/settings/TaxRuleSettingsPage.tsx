@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export default function TaxRuleSettingsPage() {
+export function TaxRuleSettingsPage() {
   const [automaticUpdates, setAutomaticUpdates] = useState(true);
   const [notifyChanges, setNotifyChanges] = useState(true);
   const [requireApproval, setRequireApproval] = useState(true);

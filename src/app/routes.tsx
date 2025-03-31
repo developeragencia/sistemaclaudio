@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Layout } from "@/components/layout";
+import { Layout } from "@/components/layout/Layout";
 import { TaxRulesLayout } from "@/components/layout/tax-rules-layout";
 import { HomePage } from "@/pages/home/HomePage";
 import { TaxCreditsPage } from "@/pages/tax-credits/TaxCreditsPage";

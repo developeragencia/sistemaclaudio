@@ -58,7 +58,7 @@ const changeTypeLabels = {
   delete: "Exclusão",
 };
 
-export default function TaxRuleHistoryPage() {
+export function TaxRuleHistoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [date, setDate] = useState({
     from: addDays(new Date(), -30),
