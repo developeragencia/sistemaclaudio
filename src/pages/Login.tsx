@@ -29,7 +29,7 @@ const Login = () => {
           description: "Bem-vindo ao Sistema Cláudio Figueiredo",
         });
         
-        navigate('/dashboard');
+        navigate('/app/home');
       } else {
         toast({
           title: "Falha no login",

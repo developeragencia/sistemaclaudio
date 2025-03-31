@@ -1,68 +1,61 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { TaxRulesLayout } from "@/components/layout/tax-rules-layout";
+import LandingPage from "@/pages/LandingPage";
+import Login from "@/pages/Login";
+import { NotFound } from "@/pages/NotFound";
 import { HomePage } from "@/pages/home/HomePage";
 import { TaxCreditsPage } from "@/pages/tax-credits/TaxCreditsPage";
-import { AdvancedCalculatorPage } from "@/pages/calculator/AdvancedCalculatorPage";
-import { IRRFCalculatorPage } from "@/pages/irrf/IRRFCalculatorPage";
-import { IRRFRecoveryPage } from "@/pages/irrf-recovery/IRRFRecoveryPage";
-import { CreditIdentificationPage } from "@/pages/credit-identification/CreditIdentificationPage";
-import { PaymentAuditPage } from "@/pages/payment-audit/PaymentAuditPage";
 import { TaxRulesPage } from "@/pages/tax-rules/TaxRulesPage";
 import { TaxRuleHistoryPage } from "@/pages/tax-rules/history/TaxRuleHistoryPage";
 import { TaxRuleSettingsPage } from "@/pages/tax-rules/settings/TaxRuleSettingsPage";
+import { AdvancedCalculatorPage } from "@/pages/calculator/AdvancedCalculatorPage";
+import { SimpleCalculatorPage } from "@/pages/calculator/SimpleCalculatorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/app",
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: "home",
         element: <HomePage />,
       },
       {
-        path: "/tax-credits",
+        path: "tax-credits",
         element: <TaxCreditsPage />,
       },
       {
-        path: "/calculator",
+        path: "tax-rules",
+        element: <TaxRulesPage />,
+      },
+      {
+        path: "tax-rules/history",
+        element: <TaxRuleHistoryPage />,
+      },
+      {
+        path: "tax-rules/settings",
+        element: <TaxRuleSettingsPage />,
+      },
+      {
+        path: "calculator/advanced",
         element: <AdvancedCalculatorPage />,
       },
       {
-        path: "/irrf-calculator",
-        element: <IRRFCalculatorPage />,
-      },
-      {
-        path: "/irrf-recovery",
-        element: <IRRFRecoveryPage />,
-      },
-      {
-        path: "/credit-identification",
-        element: <CreditIdentificationPage />,
-      },
-      {
-        path: "/payment-audit",
-        element: <PaymentAuditPage />,
-      },
-      {
-        path: "/tax-rules",
-        element: <TaxRulesLayout />,
-        children: [
-          {
-            path: "",
-            element: <TaxRulesPage />,
-          },
-          {
-            path: "history",
-            element: <TaxRuleHistoryPage />,
-          },
-          {
-            path: "settings",
-            element: <TaxRuleSettingsPage />,
-          },
-        ],
+        path: "calculator/simple",
+        element: <SimpleCalculatorPage />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]); 

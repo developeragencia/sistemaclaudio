@@ -9,36 +9,24 @@ export function Nav({ className, ...props }: NavProps) {
 
   const routes = [
     {
-      href: "/",
+      href: "/app/home",
       label: "Home",
     },
     {
-      href: "/tax-credits",
+      href: "/app/tax-credits",
       label: "Créditos Tributários",
     },
     {
-      href: "/calculator",
+      href: "/app/tax-rules",
+      label: "Regras Tributárias",
+    },
+    {
+      href: "/app/calculator/advanced",
       label: "Calculadora Avançada",
     },
     {
-      href: "/irrf-calculator",
-      label: "Cálculos IRRF",
-    },
-    {
-      href: "/irrf-recovery",
-      label: "Recuperação IRRF/PJ",
-    },
-    {
-      href: "/credit-identification",
-      label: "Identificação de Créditos",
-    },
-    {
-      href: "/payment-audit",
-      label: "Auditoria de Pagamentos",
-    },
-    {
-      href: "/tax-rules",
-      label: "Regras Tributárias",
+      href: "/app/calculator/simple",
+      label: "Calculadora Simples",
     },
   ];
 
@@ -54,7 +42,7 @@ export function Nav({ className, ...props }: NavProps) {
           className={cn(
             buttonVariants({ variant: "ghost" }),
             location.pathname === route.href ||
-            (route.href !== "/" && location.pathname.startsWith(route.href))
+            (route.href !== "/app/home" && location.pathname.startsWith(route.href))
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start"
