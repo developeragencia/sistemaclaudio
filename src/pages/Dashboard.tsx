@@ -24,7 +24,8 @@ import {
   FileBarChart,
   TrendingUp,
   Zap,
-  MonitorSmartphone
+  MonitorSmartphone,
+  Search
 } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
 import RecentActivities from '@/components/dashboard/RecentActivities';
@@ -47,7 +48,7 @@ const MOCK_ACTIVITIES = [
       name: 'João Silva',
       role: 'Representante Comercial',
     },
-    type: 'success',
+    type: 'success' as const,
   },
   {
     id: '2',
@@ -58,7 +59,7 @@ const MOCK_ACTIVITIES = [
       name: 'Maria Souza',
       role: 'Analista Fiscal',
     },
-    type: 'info',
+    type: 'info' as const,
   },
   {
     id: '3',
@@ -69,7 +70,7 @@ const MOCK_ACTIVITIES = [
       name: 'Sistema',
       role: 'Automático',
     },
-    type: 'warning',
+    type: 'warning' as const,
   },
   {
     id: '4',
@@ -80,7 +81,7 @@ const MOCK_ACTIVITIES = [
       name: 'Carlos Mendes',
       role: 'Analista de Dados',
     },
-    type: 'error',
+    type: 'error' as const,
   },
 ];
 
