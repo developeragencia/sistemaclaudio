@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from "@/components/ui/use-toast"
@@ -80,7 +79,6 @@ const AuditPage: React.FC = () => {
     },
   ];
 
-  // Fixed the toast variant to use 'default' instead of 'success'
   const handleProcessAudit = async (clientId: string) => {
     setIsLoading(true);
     try {
@@ -99,10 +97,8 @@ const AuditPage: React.FC = () => {
         return;
       }
 
-      // Process each payment
       const results = await Promise.all(
         paymentData.map(async (payment) => {
-          // Get tax rate based on supplier's activity code
           const { data: taxRateData, error: taxRateError } = await supabase
             .from('tax_rates')
             .select('*')
@@ -116,11 +112,9 @@ const AuditPage: React.FC = () => {
             };
           }
 
-          // Calculate retention
           const retentionAmount = (payment.amount * taxRateData.retention_rate) / 100;
           const netAmount = payment.amount - retentionAmount;
 
-          // Save audit result
           const { data: auditData, error: auditError } = await supabase
             .from('audit_results')
             .insert({
@@ -150,7 +144,6 @@ const AuditPage: React.FC = () => {
         })
       );
 
-      // Check for any errors
       const errors = results.filter(r => r.error);
       if (errors.length > 0) {
         toast({
@@ -160,13 +153,11 @@ const AuditPage: React.FC = () => {
         });
       } else {
         toast({
-          // Changed from 'success' to 'default'
           title: "Auditoria concluída",
           description: `${results.length} pagamentos processados com sucesso.`,
         });
       }
 
-      // Refresh data
       fetchAuditResults();
     } catch (error) {
       console.error(error);
