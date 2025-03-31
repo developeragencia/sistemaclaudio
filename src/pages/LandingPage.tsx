@@ -24,7 +24,7 @@ const LandingPage = () => {
         </p>
         
         <div className="mb-12 animate-fade-in animate-delay-3">
-          <Link to="/login" className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group">
+          <Link to="/login" className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] rounded-lg shadow-lg hover:from-[#1A1F2C] hover:to-[#9b87f5] transition-all duration-300 group">
             Acessar Sistema
             <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
           </Link>
