@@ -60,15 +60,6 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="text-center mb-6 animate-fade-in animate-delay-1">
-          <div>
-            Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
-          </div>
-          <div className="mt-1 text-sm text-gray-500">
-            © 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.
-          </div>
-        </div>
-
         <Card className="w-full backdrop-blur-sm bg-white/95 animate-fade-in animate-delay-1 shadow-xl border-gray-200">
           <CardHeader>
             <CardTitle className="text-center">Acesse sua conta</CardTitle>

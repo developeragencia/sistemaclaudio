@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Sidebar, 
@@ -318,21 +319,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             )}
             
             {children}
-            
-            <div className="mt-10 pt-6 border-t border-gray-200 text-center">
-              <p className="text-gray-500 text-sm">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
-              <p className="mt-1 text-gray-500 text-sm">
-                Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
-              </p>
-            </div>
           </main>
-          
-          <footer className="border-t bg-white p-4 text-center text-gray-500 text-xs">
-            <div>© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</div>
-            <div className="mt-1">
-              Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 transition-colors">Alex Developer</a>
-            </div>
-          </footer>
         </div>
       </div>
     </SidebarProvider>
