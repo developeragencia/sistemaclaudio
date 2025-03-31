@@ -16,9 +16,9 @@ import CNPJIntegration from "./pages/CNPJ/Integration";
 import AuditPage from "./pages/Audit/AuditPage";
 import TaxRatesPage from "./pages/TaxRates/TaxRatesPage";
 
-// Create a new QueryClient instance outside the component
 const queryClient = new QueryClient();
 
+// Componente de proteção de rotas
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -37,6 +37,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Componente para redirecionar usuários autenticados
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -49,6 +50,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (isAuthenticated) {
+    // Modificando para verificar se o usuário é admin e redirecionar corretamente
     const { user } = useAuth();
     
     if (user?.role === 'admin') {
@@ -61,6 +63,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Componente de Layout Autenticado
 const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ProtectedRoute>
@@ -69,6 +72,7 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// Componente de proteção de rotas apenas para administradores
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading, isAuthenticated } = useAuth();
 
@@ -91,6 +95,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Componente de Layout para Administradores
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <AdminRoute>
@@ -99,6 +104,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// Página temporária para rotas em desenvolvimento
 const UnderDevelopment = () => (
   <div className="flex flex-col items-center justify-center p-8">
     <h1 className="text-2xl font-bold mb-4">Página em Desenvolvimento</h1>
@@ -107,57 +113,64 @@ const UnderDevelopment = () => (
   </div>
 );
 
-// Use a regular function component for App, not a const arrow function
-function App() {
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              
-              <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-              
-              <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-              <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
-              <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
-              <Route path="/credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-              <Route path="/reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-              <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
-              
-              <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              <Route path="/users" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              <Route path="/security" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/access-control" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/logs" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
-              <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
-              
-              <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              <Route path="/support-tickets" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/help" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/contact" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </AuthProvider>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Landing Page */}
+            <Route path="/" element={<LandingPage />} />
+            
+            {/* Rotas públicas */}
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            
+            {/* Rotas protegidas */}
+            <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+            <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
+            <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
+            <Route path="/credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+            <Route path="/reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+            <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
+            
+            {/* Rotas administrativas - Principal */}
+            <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            
+            {/* Rotas administrativas - Módulos Principais */}
+            <Route path="/users" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            
+            {/* Rotas administrativas - Segurança & Auditoria */}
+            <Route path="/security" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/access-control" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/logs" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
+            <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
+            
+            {/* Rotas administrativas - Operacional */}
+            <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            
+            {/* Rotas administrativas - Site e Conteúdo */}
+            <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            
+            {/* Rotas administrativas - Suporte */}
+            <Route path="/support-tickets" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/help" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            <Route path="/contact" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+            
+            {/* Rota 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

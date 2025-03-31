@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Gavel, Scale } from 'lucide-react';
 
 interface LogoProps {
   animated?: boolean;
@@ -44,31 +43,21 @@ const Logo: React.FC<LogoProps> = ({
     xl: 'text-base'
   };
 
-  const iconSizes = {
-    sm: 'h-8 w-8',
-    md: 'h-12 w-12',
-    lg: 'h-16 w-16',
-    xl: 'h-24 w-24'
-  };
-
   return (
     <div className={`flex items-center ${className}`}>
-      <div className={`logo-container relative ${animationClasses}`}>
-        <div className="relative">
-          <Scale 
-            className={`${iconSizes[size]} text-taxglider-blue-600 ${animated && !isMobile ? 'animate-float' : ''}`}
-          />
-          <Gavel 
-            className={`absolute -bottom-1 -right-1 ${size === 'sm' ? 'h-4 w-4' : 'h-6 w-6'} text-taxglider-blue-800 ${animated ? 'animate-pulse' : ''}`}
-          />
-        </div>
+      <div className={`logo-container ${animationClasses}`}>
+        <img 
+          src="/lovable-uploads/b5ab68a5-181d-4e3b-b687-86db1d8e229c.png" 
+          alt="Cláudio Figueiredo Logo" 
+          className={`${sizeClasses[size]} ${animated && !isMobile ? 'animate-pulse' : ''}`}
+        />
       </div>
       <div className="ml-3 flex flex-col">
-        <h1 className={`logo-text font-montserrat font-bold ${textSizes[size]} ${animated ? 'animate-fade-in' : ''} text-taxglider-blue-800`}>
+        <h1 className={`logo-text ${textSizes[size]} ${animated ? 'animate-fade-in' : ''}`}>
           CLÁUDIO FIGUEIREDO
         </h1>
         {withSubtitle && (
-          <span className={`logo-subtitle font-montserrat ${subtitleSizes[size]} ${animated ? 'animate-fade-in animate-delay-2' : ''} text-figueiredo-gray-600`}>
+          <span className={`logo-subtitle ${subtitleSizes[size]} ${animated ? 'animate-fade-in animate-delay-2' : ''}`}>
             ADVOGADOS ASSOCIADOS
           </span>
         )}
