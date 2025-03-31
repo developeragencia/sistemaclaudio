@@ -159,9 +159,8 @@ function App() {
               <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
               <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
+              <Route path="/audit-retention" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               
               <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />

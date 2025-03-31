@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Sidebar, 
@@ -31,7 +30,7 @@ import {
   KeyRound,
   History,
   HardDrive,
-  Network,
+  Workflow,
   Globe,
   FileEdit,
   HeartHandshake,
@@ -50,7 +49,6 @@ import {
   Database,
   TrendingUp,
   Lock,
-  Workflow,
   BookOpen,
   AlertTriangle
 } from 'lucide-react';
@@ -343,9 +341,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Configurações e Integrações */}
+                {/* Configurações */}
                 <SidebarGroup>
-                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Configurações & Integrações</SidebarGroupLabel>
+                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Configurações</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
                       <SidebarMenuItem>
@@ -376,28 +374,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </SidebarMenuItem>
                       
                       <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/integrations') ? 'menu-item-active' : ''}>
-                          <Link to="/integrations" className="flex items-center gap-2">
-                            <Network size={18} />
-                            <span>Integrações</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                      
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/cnpj-integration') ? 'menu-item-active' : ''}>
-                          <Link to="/cnpj-integration" className="flex items-center gap-2">
-                            <FileText size={18} />
-                            <span>Integração CNPJ</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                      
-                      <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/tax-rates') ? 'menu-item-active' : ''}>
                           <Link to="/tax-rates" className="flex items-center gap-2">
                             <Calculator size={18} />
                             <span>Alíquotas Fiscais</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/audit-retention') ? 'menu-item-active' : ''}>
+                          <Link to="/audit-retention" className="flex items-center gap-2">
+                            <Scan size={18} />
+                            <span>Auditoria e Retenções</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
