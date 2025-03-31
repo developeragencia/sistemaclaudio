@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,13 +29,7 @@ const Login = () => {
           description: "Bem-vindo ao Sistema Cláudio Figueiredo",
         });
         
-        // Corrigindo a navegação - verificar se o usuário é admin
-        // e redirecionar para o painel administrativo
-        if (email === 'admin@sistemaclaudiofigueiredo.com') {
-          navigate('/admin-dashboard');
-        } else {
-          navigate('/dashboard');
-        }
+        navigate('/dashboard');
       } else {
         toast({
           title: "Falha no login",
