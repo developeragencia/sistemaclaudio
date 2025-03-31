@@ -2,306 +2,176 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
+ 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 210 100% 55%;
+ 
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
-    --secondary: 160 50% 45%;
-    --secondary-foreground: 210 40% 98%;
-
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
+ 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
+ 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 210 100% 55%;
-
+    --ring: 222.2 84% 4.9%;
+ 
     --radius: 0.5rem;
 
-    --sidebar-background: 210 100% 10%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 210 100% 55%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 50% 15%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 210 50% 20%;
-    --sidebar-ring: 210 100% 55%;
-  }
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-ring: 215 20.2% 65.1%;
 
+    --taxglider-blue-50: 210 100% 98%;
+    --taxglider-blue-100: 210 97% 94%;
+    --taxglider-blue-200: 210 95% 86%;
+    --taxglider-blue-300: 210 95% 76%;
+    --taxglider-blue-400: 210 95% 65%;
+    --taxglider-blue-500: 210 95% 53%;
+    --taxglider-blue-600: 210 90% 48%;
+    --taxglider-blue-700: 215 90% 43%;
+    --taxglider-blue-800: 220 85% 35%;
+    --taxglider-blue-900: 225 80% 30%;
+    --taxglider-blue-950: 230 80% 20%;
+
+    --taxglider-gray-50: 210 20% 98%;
+    --taxglider-gray-100: 210 16% 95%;
+    --taxglider-gray-200: 210 14% 89%;
+    --taxglider-gray-300: 210 12% 83%;
+    --taxglider-gray-400: 210 10% 62%;
+    --taxglider-gray-500: 210 8% 46%;
+    --taxglider-gray-600: 210 6% 35%;
+    --taxglider-gray-700: 214 8% 27%;
+    --taxglider-gray-800: 216 10% 18%;
+    --taxglider-gray-900: 218 12% 10%;
+    --taxglider-gray-950: 220 14% 5%;
+  }
+ 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
+ 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
+ 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 210 100% 55%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 160 50% 45%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
+ 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
+ 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
+ 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
+ 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 210 100% 55%;
-    
-    --sidebar-background: 210 100% 10%;
+    --ring: 212.7 26.8% 83.9%;
+
+    --sidebar: 222.2 84% 4.9%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 210 100% 55%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 50% 15%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 210 50% 20%;
-    --sidebar-ring: 210 100% 55%;
+    --sidebar-ring: 212.7 26.8% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
-  html, body {
-    @apply h-full w-full;
-    /* Removed overflow-hidden to allow scrolling */
-  }
-
   body {
-    @apply bg-background text-foreground font-montserrat;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  .menu-item {
-    @apply flex items-center gap-2 py-2 px-3 rounded-md hover:bg-accent transition-colors;
-  }
+/* Classe adicional para o item de menu ativo */
+.menu-item-active {
+  @apply bg-accent text-accent-foreground font-medium;
+}
 
-  .menu-item-active {
-    @apply bg-accent text-accent-foreground font-medium;
+/* Estilos para os cards de módulos */
+@keyframes pulse-soft {
+  0%, 100% {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
-
-  .card-hover {
-    @apply transition-all duration-200 hover:shadow-md hover:scale-[1.01];
-  }
-  
-  /* Responsive utilities */
-  .responsive-container {
-    @apply w-full px-4 md:px-6 mx-auto;
-    max-width: 100%;
-  }
-  
-  @screen sm {
-    .responsive-container {
-      max-width: 640px;
-    }
-  }
-  
-  @screen md {
-    .responsive-container {
-      max-width: 768px;
-    }
-  }
-  
-  @screen lg {
-    .responsive-container {
-      max-width: 1024px;
-    }
-  }
-  
-  @screen xl {
-    .responsive-container {
-      max-width: 1280px;
-    }
-  }
-  
-  /* Logo Animation Classes */
-  .logo-container {
-    @apply relative;
-  }
-  
-  .logo-image {
-    @apply transition-all duration-500;
-  }
-  
-  .logo-text {
-    @apply font-bold tracking-tight;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo-subtitle {
-    @apply text-gray-400 font-light uppercase tracking-wider;
-  }
-  
-  /* Animated Gradient Buttons */
-  .gradient-button {
-    @apply relative overflow-hidden text-white font-semibold py-3 px-6 rounded-md shadow-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl;
-    background: linear-gradient(90deg, #333333, #555555, #333333);
-    background-size: 200% 100%;
-    animation: gradientShift 8s ease infinite;
-  }
-  
-  /* Landing Page Classes */
-  .hero-container {
-    @apply min-h-screen flex flex-col items-center justify-center relative overflow-hidden;
-  }
-  
-  .hero-content {
-    @apply z-10 text-center px-6 max-w-4xl mx-auto;
-  }
-  
-  .hero-title {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .hero-subtitle {
-    @apply text-lg md:text-xl mb-10;
-  }
-  
-  .hero-cta {
-    @apply inline-block;
-  }
-  
-  /* Animations */
-  @keyframes gradientShift {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes logoSpin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  /* Animation Classes */
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
-  
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  .animate-pulse {
-    animation: pulse 3s ease-in-out infinite;
-  }
-  
-  .animate-delay-1 {
-    animation-delay: 0.2s;
-  }
-  
-  .animate-delay-2 {
-    animation-delay: 0.4s;
-  }
-  
-  .animate-delay-3 {
-    animation-delay: 0.6s;
-  }
-  
-  .animate-delay-4 {
-    animation-delay: 0.8s;
-  }
-  
-  .animate-spin-slow {
-    animation: logoSpin 30s linear infinite;
-  }
-  
-  .bg-geometric {
-    background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
-  }
-  
-  .grid-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+  50% {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 }
 
-/* Font Settings */
-@layer base {
-  html {
-    font-family: 'Montserrat', system-ui, sans-serif;
+.module-card {
+  @apply transition-all duration-300;
+}
+
+.module-card:hover {
+  animation: pulse-soft 2s infinite;
+  transform: translateY(-5px);
+}
+
+/* Efeito de transição para os cards */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.module-grid > a {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+
+/* Atraso para cada cartão aparecer em sequência */
+.module-grid > a:nth-child(1) { animation-delay: 0.1s; }
+.module-grid > a:nth-child(2) { animation-delay: 0.2s; }
+.module-grid > a:nth-child(3) { animation-delay: 0.3s; }
+.module-grid > a:nth-child(4) { animation-delay: 0.4s; }
+.module-grid > a:nth-child(5) { animation-delay: 0.5s; }
+.module-grid > a:nth-child(6) { animation-delay: 0.6s; }
+.module-grid > a:nth-child(7) { animation-delay: 0.7s; }
+.module-grid > a:nth-child(8) { animation-delay: 0.8s; }
+.module-grid > a:nth-child(9) { animation-delay: 0.9s; }
+.module-grid > a:nth-child(10) { animation-delay: 1.0s; }
+.module-grid > a:nth-child(11) { animation-delay: 1.1s; }
+.module-grid > a:nth-child(12) { animation-delay: 1.2s; }
+.module-grid > a:nth-child(13) { animation-delay: 1.3s; }
+.module-grid > a:nth-child(14) { animation-delay: 1.4s; }
+.module-grid > a:nth-child(15) { animation-delay: 1.5s; }
+.module-grid > a:nth-child(16) { animation-delay: 1.6s; }

@@ -1,12 +1,10 @@
-
 import React from 'react';
 import { 
-  BarChart3, 
+  BarChart, 
   Calculator, 
   Users, 
   FileText, 
   ArrowUpRight, 
-  Search, 
   ListChecks, 
   ArrowLeftRight, 
   LayoutDashboard, 
@@ -16,10 +14,20 @@ import {
   Eye,
   Receipt,
   ArrowUp,
-  FileCheck
+  FileCheck,
+  Building2,
+  UserCog,
+  Lock,
+  Shield,
+  AlertTriangle,
+  Database,
+  FileBarChart,
+  TrendingUp,
+  Zap,
+  MonitorSmartphone
 } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
-import RecentActivities, { Activity } from '@/components/dashboard/RecentActivities';
+import RecentActivities from '@/components/dashboard/RecentActivities';
 import ClientsList from '@/components/dashboard/ClientsList';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
@@ -27,33 +35,9 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { 
-  Shield, 
-  KeyRound, 
-  History, 
-  HardDrive, 
-  Network, 
-  Globe, 
-  FileEdit as FileEditIcon, 
-  HeartHandshake, 
-  HelpCircle,
-  Phone,
-  Workflow,
-  BookOpen,
-  BarChart 
-} from 'lucide-react';
 
-const MOCK_ACTIVITIES: Activity[] = [
+const MOCK_ACTIVITIES = [
   {
     id: '1',
     title: 'Proposta comercial aprovada',
@@ -109,7 +93,7 @@ const Dashboard = () => {
         <StatCard
           title="Total de Créditos Recuperados"
           value="R$ 1.245.678,90"
-          icon={<BarChart3 className="h-5 w-5" />}
+          icon={<BarChart className="h-5 w-5" />}
           trend={{ value: 12, isPositive: true }}
         />
         <StatCard
@@ -182,104 +166,139 @@ const Dashboard = () => {
       {user?.role === 'admin' && (
         <Card className="p-6">
           <CardHeader className="px-0 pt-0">
-            <CardTitle>Menu do Administrador</CardTitle>
-            <CardDescription>Acesso rápido às funções administrativas</CardDescription>
+            <CardTitle className="text-2xl">Módulos Principais</CardTitle>
+            <CardDescription>Acesso rápido às funcionalidades do sistema</CardDescription>
           </CardHeader>
           <CardContent className="px-0 pt-2 pb-0">
-            <NavigationMenu>
-              <NavigationMenuList className="flex-wrap gap-1">
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Gestão do Sistema</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
-                      <ListItem href="/admin-dashboard" title="Painel de Controle" icon={<BarChart className="h-4 w-4 mr-2" />}>
-                        Visão geral de métricas e indicadores
-                      </ListItem>
-                      <ListItem href="/settings" title="Configurações" icon={<FileEdit className="h-4 w-4 mr-2" />}>
-                        Configurações gerais do sistema
-                      </ListItem>
-                      <ListItem href="/users" title="Usuários" icon={<Users className="h-4 w-4 mr-2" />}>
-                        Gerenciamento de usuários e permissões
-                      </ListItem>
-                      <ListItem href="/workflows" title="Fluxos de Trabalho" icon={<Workflow className="h-4 w-4 mr-2" />}>
-                        Configuração de processos automatizados
-                      </ListItem>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Segurança</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
-                      <ListItem href="/security" title="Segurança" icon={<Shield className="h-4 w-4 mr-2" />}>
-                        Políticas e configurações de segurança
-                      </ListItem>
-                      <ListItem href="/access-control" title="Controle de Acesso" icon={<KeyRound className="h-4 w-4 mr-2" />}>
-                        Gerenciamento de permissões e níveis de acesso
-                      </ListItem>
-                      <ListItem href="/logs" title="Logs do Sistema" icon={<History className="h-4 w-4 mr-2" />}>
-                        Histórico de atividades e auditoria
-                      </ListItem>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <ModuleCard 
+                title="Controle de Clientes"
+                description="Gestão completa de clientes e usuários ativos por CNPJ"
+                icon={<Building2 size={24} />}
+                href="/client-management"
+                color="bg-gradient-to-br from-blue-500 to-blue-700"
+              />
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Integrações</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
-                      <ListItem href="/backup" title="Backup & Restauração" icon={<HardDrive className="h-4 w-4 mr-2" />}>
-                        Gerenciamento de backup e restauração de dados
-                      </ListItem>
-                      <ListItem href="/integrations" title="Integrações" icon={<Network className="h-4 w-4 mr-2" />}>
-                        Conexões com serviços externos
-                      </ListItem>
-                      <ListItem href="/cnpj-integration" title="Integração CNPJ" icon={<FileText className="h-4 w-4 mr-2" />}>
-                        Pesquisa e validação de CNPJ
-                      </ListItem>
-                      <ListItem href="/tax-rates" title="Alíquotas Fiscais" icon={<Calculator className="h-4 w-4 mr-2" />}>
-                        Gerenciamento de alíquotas de impostos
-                      </ListItem>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+              <ModuleCard 
+                title="Propostas Comerciais" 
+                description="Gerenciamento de propostas e contratos"
+                icon={<FileText size={24} />}
+                href="/commercial-proposals"
+                color="bg-gradient-to-br from-indigo-500 to-indigo-700"
+              />
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Conteúdo</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
-                      <ListItem href="/website" title="Website" icon={<Globe className="h-4 w-4 mr-2" />}>
-                        Gestão de conteúdo do website
-                      </ListItem>
-                      <ListItem href="/content" title="Gerenciar Conteúdo" icon={<FileEdit className="h-4 w-4 mr-2" />}>
-                        Criação e edição de conteúdo do portal
-                      </ListItem>
-                      <ListItem href="/knowledge-base" title="Base de Conhecimento" icon={<BookOpen className="h-4 w-4 mr-2" />}>
-                        Documentação e base de conhecimento
-                      </ListItem>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+              <ModuleCard 
+                title="Identificação de Créditos"
+                description="Análise automática de créditos tributários"
+                icon={<Search size={24} />}
+                href="/credit-identification"
+                color="bg-gradient-to-br from-emerald-500 to-emerald-700"
+              />
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Suporte</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] grid-cols-2">
-                      <ListItem href="/support-tickets" title="Tickets de Suporte" icon={<HeartHandshake className="h-4 w-4 mr-2" />}>
-                        Gerenciamento de solicitações de suporte
-                      </ListItem>
-                      <ListItem href="/help" title="Ajuda" icon={<HelpCircle className="h-4 w-4 mr-2" />}>
-                        Documentação e recursos de ajuda
-                      </ListItem>
-                      <ListItem href="/contact" title="Contato" icon={<Phone className="h-4 w-4 mr-2" />}>
-                        Informações de contato e suporte
-                      </ListItem>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+              <ModuleCard 
+                title="Importação de Dados"
+                description="Processamento inteligente de dados"
+                icon={<Database size={24} />}
+                href="/data-import"
+                color="bg-gradient-to-br from-amber-500 to-amber-700"
+              />
+
+              <ModuleCard 
+                title="Calculadora Avançada"
+                description="Cálculos precisos de impostos e retenções"
+                icon={<Calculator size={24} />}
+                href="/advanced-calculator"
+                color="bg-gradient-to-br from-purple-500 to-purple-700"
+              />
+
+              <ModuleCard 
+                title="Cálculos IRRF"
+                description="Automação de cálculos de retenção"
+                icon={<Receipt size={24} />}
+                href="/irrf-calculations"
+                color="bg-gradient-to-br from-cyan-500 to-cyan-700"
+              />
+
+              <ModuleCard 
+                title="Recuperação IRRF/PJ"
+                description="Gestão de recuperação de impostos retidos"
+                icon={<ArrowUp size={24} />}
+                href="/irrf-recovery"
+                color="bg-gradient-to-br from-pink-500 to-pink-700"
+              />
+
+              <ModuleCard 
+                title="Auditoria de Retenções"
+                description="Verificação detalhada das retenções"
+                icon={<Scan size={24} />}
+                href="/audit-management"
+                color="bg-gradient-to-br from-red-500 to-red-700"
+              />
+
+              <ModuleCard 
+                title="Correção Monetária"
+                description="Atualização automática pela taxa Selic"
+                icon={<TrendingUp size={24} />}
+                href="/monetary-correction"
+                color="bg-gradient-to-br from-orange-500 to-orange-700"
+              />
+
+              <ModuleCard 
+                title="Relatórios Detalhados"
+                description="Geração de relatórios e dossiês tributários"
+                icon={<ListChecks size={24} />}
+                href="/detailed-reports"
+                color="bg-gradient-to-br from-green-500 to-green-700"
+              />
+
+              <ModuleCard 
+                title="Compensação Tributária"
+                description="Simulação e execução de compensações"
+                icon={<ArrowLeftRight size={24} />}
+                href="/tax-compensation"
+                color="bg-gradient-to-br from-teal-500 to-teal-700"
+              />
+
+              <ModuleCard 
+                title="Dashboard Interativo"
+                description="Visualização analítica de dados"
+                icon={<LayoutDashboard size={24} />}
+                href="/interactive-dashboard"
+                color="bg-gradient-to-br from-violet-500 to-violet-700"
+              />
+
+              <ModuleCard 
+                title="Segurança e Auditoria"
+                description="Controle de acessos e trilhas de auditoria"
+                icon={<Shield size={24} />}
+                href="/security"
+                color="bg-gradient-to-br from-rose-500 to-rose-700"
+              />
+
+              <ModuleCard 
+                title="Comprovantes de Retenção"
+                description="Emissão e controle de comprovantes"
+                icon={<ClipboardCheck size={24} />}
+                href="/retention-receipts"
+                color="bg-gradient-to-br from-sky-500 to-sky-700"
+              />
+
+              <ModuleCard 
+                title="Relatórios Fiscais"
+                description="Relatórios estratégicos para compensação"
+                icon={<FileBarChart size={24} />}
+                href="/fiscal-reports"
+                color="bg-gradient-to-br from-lime-500 to-lime-700"
+              />
+
+              <ModuleCard 
+                title="Dossiês Tributários"
+                description="Documentação tributária completa"
+                icon={<FileEdit size={24} />}
+                href="/tax-dossiers"
+                color="bg-gradient-to-br from-fuchsia-500 to-fuchsia-700"
+              />
+            </div>
           </CardContent>
         </Card>
       )}
@@ -337,35 +356,43 @@ const Dashboard = () => {
   );
 };
 
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a"> & { 
-    title: string;
-    icon?: React.ReactNode;
-  }
->(({ className, title, icon, children, ...props }, ref) => {
+const ModuleCard = ({ 
+  title, 
+  description, 
+  icon, 
+  href, 
+  color = "bg-gradient-to-br from-blue-500 to-blue-700" 
+}: { 
+  title: string; 
+  description: string; 
+  icon: React.ReactNode; 
+  href: string;
+  color?: string;
+}) => {
   return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="flex items-center text-sm font-medium leading-none">
-            {icon} {title}
-          </div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
+    <Link
+      to={href}
+      className={cn(
+        color,
+        "relative overflow-hidden rounded-lg p-6 text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 flex flex-col h-48"
+      )}
+    >
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-0 transition-opacity duration-300 hover:opacity-10 z-0" />
+      
+      <div className="mb-4 p-2 bg-white bg-opacity-20 rounded-full w-fit">
+        {icon}
+      </div>
+      
+      <h3 className="text-lg font-bold mb-2 z-10">{title}</h3>
+      <p className="text-sm text-white/90 z-10 line-clamp-3">{description}</p>
+      
+      <div className="mt-auto flex justify-end">
+        <span className="text-xs font-bold uppercase tracking-wider bg-white bg-opacity-20 px-2 py-1 rounded-md">
+          Acessar
+        </span>
+      </div>
+    </Link>
   );
-});
-ListItem.displayName = "ListItem";
+};
 
 export default Dashboard;

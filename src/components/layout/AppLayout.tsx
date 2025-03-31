@@ -27,14 +27,11 @@ import {
   FileBarChart,
   Calculator,
   UserCog,
-  FileSearch,
-  History,
   Shield,
   KeyRound,
+  History,
   HardDrive,
   Network,
-  Workflow,
-  BookOpen,
   Globe,
   FileEdit,
   HeartHandshake,
@@ -49,7 +46,13 @@ import {
   ArrowUp,
   Receipt,
   Eye,
-  FileCheck
+  FileCheck,
+  Database,
+  TrendingUp,
+  Lock,
+  Workflow,
+  BookOpen,
+  AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -107,8 +110,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </SidebarHeader>
 
           <SidebarContent className="overflow-y-auto">
+            {/* Dashboard e Navegação Principal */}
             <SidebarGroup>
-              <SidebarGroupLabel className="text-sm font-medium text-gray-400">Navegação</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-sm font-medium text-gray-400">Principal</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
@@ -119,48 +123,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  
+
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/clients') ? 'menu-item-active' : ''}>
-                      <Link to="/clients" className="flex items-center gap-2">
+                    <SidebarMenuButton asChild className={isActiveRoute('/client-management') ? 'menu-item-active' : ''}>
+                      <Link to="/client-management" className="flex items-center gap-2">
                         <Building2 size={18} />
-                        <span>Clientes</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/proposals') ? 'menu-item-active' : ''}>
-                      <Link to="/proposals" className="flex items-center gap-2">
-                        <FileText size={18} />
-                        <span>Propostas</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/credits') ? 'menu-item-active' : ''}>
-                      <Link to="/credits" className="flex items-center gap-2">
-                        <Calculator size={18} />
-                        <span>Apuração de Créditos</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/reports') ? 'menu-item-active' : ''}>
-                      <Link to="/reports" className="flex items-center gap-2">
-                        <FileBarChart size={18} />
-                        <span>Relatórios</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/audit') ? 'menu-item-active' : ''}>
-                      <Link to="/audit" className="flex items-center gap-2">
-                        <FileSearch size={18} />
-                        <span>Auditoria</span>
+                        <span>Controle de Clientes</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -168,16 +136,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </SidebarGroupContent>
             </SidebarGroup>
 
-            {/* Novo grupo de Módulos Principais */}
+            {/* Módulos Principais */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-sm font-medium text-gray-400">Módulos Principais</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/client-management') ? 'menu-item-active' : ''}>
-                      <Link to="/client-management" className="flex items-center gap-2">
-                        <Users size={18} />
-                        <span>Gestão de Clientes</span>
+                    <SidebarMenuButton asChild className={isActiveRoute('/commercial-proposals') ? 'menu-item-active' : ''}>
+                      <Link to="/commercial-proposals" className="flex items-center gap-2">
+                        <FileText size={18} />
+                        <span>Propostas Comerciais</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -199,7 +167,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={isActiveRoute('/irrf-calculations') ? 'menu-item-active' : ''}>
                       <Link to="/irrf-calculations" className="flex items-center gap-2">
@@ -208,7 +176,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={isActiveRoute('/irrf-recovery') ? 'menu-item-active' : ''}>
                       <Link to="/irrf-recovery" className="flex items-center gap-2">
@@ -217,7 +185,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={isActiveRoute('/credit-identification') ? 'menu-item-active' : ''}>
                       <Link to="/credit-identification" className="flex items-center gap-2">
@@ -226,7 +194,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  
+
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/data-import') ? 'menu-item-active' : ''}>
+                      <Link to="/data-import" className="flex items-center gap-2">
+                        <Database size={18} />
+                        <span>Importação de Dados</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild className={isActiveRoute('/detailed-reports') ? 'menu-item-active' : ''}>
                       <Link to="/detailed-reports" className="flex items-center gap-2">
@@ -273,10 +250,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarMenuItem>
                   
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActiveRoute('/commercial-proposals') ? 'menu-item-active' : ''}>
-                      <Link to="/commercial-proposals" className="flex items-center gap-2">
-                        <FileEdit size={18} />
-                        <span>Propostas Comerciais</span>
+                    <SidebarMenuButton asChild className={isActiveRoute('/monetary-correction') ? 'menu-item-active' : ''}>
+                      <Link to="/monetary-correction" className="flex items-center gap-2">
+                        <TrendingUp size={18} />
+                        <span>Correção Monetária</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -289,72 +266,35 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/tax-dossiers') ? 'menu-item-active' : ''}>
+                      <Link to="/tax-dossiers" className="flex items-center gap-2">
+                        <FileEdit size={18} />
+                        <span>Dossiês Tributários</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
 
             {user?.role === 'admin' && (
               <>
+                {/* Segurança & Auditoria */}
                 <SidebarGroup>
-                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Principal</SidebarGroupLabel>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/admin-dashboard') ? 'menu-item-active' : ''}>
-                          <Link to="/admin-dashboard" className="flex items-center gap-2">
-                            <BarChart3 size={18} />
-                            <span>Painel de Controle</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/settings') ? 'menu-item-active' : ''}>
-                          <Link to="/settings" className="flex items-center gap-2">
-                            <Settings size={18} />
-                            <span>Configurações</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-
-                <SidebarGroup>
-                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Módulos Principais</SidebarGroupLabel>
+                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Segurança & Auditoria</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/users') ? 'menu-item-active' : ''}>
                           <Link to="/users" className="flex items-center gap-2">
                             <Users size={18} />
-                            <span>Usuários</span>
+                            <span>Gestão de Usuários</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/workflows') ? 'menu-item-active' : ''}>
-                          <Link to="/workflows" className="flex items-center gap-2">
-                            <Workflow size={18} />
-                            <span>Fluxos de Trabalho</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild className={isActiveRoute('/knowledge-base') ? 'menu-item-active' : ''}>
-                          <Link to="/knowledge-base" className="flex items-center gap-2">
-                            <BookOpen size={18} />
-                            <span>Base de Conhecimento</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-
-                <SidebarGroup>
-                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Segurança & Auditoria</SidebarGroupLabel>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/security') ? 'menu-item-active' : ''}>
                           <Link to="/security" className="flex items-center gap-2">
@@ -363,6 +303,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/access-control') ? 'menu-item-active' : ''}>
                           <Link to="/access-control" className="flex items-center gap-2">
@@ -371,6 +312,25 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/two-factor') ? 'menu-item-active' : ''}>
+                          <Link to="/two-factor" className="flex items-center gap-2">
+                            <Lock size={18} />
+                            <span>Autenticação 2FA</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/alerts') ? 'menu-item-active' : ''}>
+                          <Link to="/alerts" className="flex items-center gap-2">
+                            <AlertTriangle size={18} />
+                            <span>Alertas de Segurança</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/logs') ? 'menu-item-active' : ''}>
                           <Link to="/logs" className="flex items-center gap-2">
@@ -383,10 +343,20 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </SidebarGroupContent>
                 </SidebarGroup>
 
+                {/* Configurações e Integrações */}
                 <SidebarGroup>
-                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Operacional</SidebarGroupLabel>
+                  <SidebarGroupLabel className="text-sm font-medium text-gray-400">Configurações & Integrações</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/settings') ? 'menu-item-active' : ''}>
+                          <Link to="/settings" className="flex items-center gap-2">
+                            <Settings size={18} />
+                            <span>Configurações Gerais</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/backup') ? 'menu-item-active' : ''}>
                           <Link to="/backup" className="flex items-center gap-2">
@@ -395,6 +365,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/workflows') ? 'menu-item-active' : ''}>
+                          <Link to="/workflows" className="flex items-center gap-2">
+                            <Workflow size={18} />
+                            <span>Fluxos de Trabalho</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/integrations') ? 'menu-item-active' : ''}>
                           <Link to="/integrations" className="flex items-center gap-2">
@@ -403,10 +383,29 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/cnpj-integration') ? 'menu-item-active' : ''}>
+                          <Link to="/cnpj-integration" className="flex items-center gap-2">
+                            <FileText size={18} />
+                            <span>Integração CNPJ</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/tax-rates') ? 'menu-item-active' : ''}>
+                          <Link to="/tax-rates" className="flex items-center gap-2">
+                            <Calculator size={18} />
+                            <span>Alíquotas Fiscais</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
                 </SidebarGroup>
 
+                {/* Site e Conteúdo */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Site e Conteúdo</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -419,6 +418,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/content') ? 'menu-item-active' : ''}>
                           <Link to="/content" className="flex items-center gap-2">
@@ -427,10 +427,20 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild className={isActiveRoute('/knowledge-base') ? 'menu-item-active' : ''}>
+                          <Link to="/knowledge-base" className="flex items-center gap-2">
+                            <BookOpen size={18} />
+                            <span>Base de Conhecimento</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
                 </SidebarGroup>
 
+                {/* Suporte */}
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-sm font-medium text-gray-400">Suporte</SidebarGroupLabel>
                   <SidebarGroupContent>
@@ -443,6 +453,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/help') ? 'menu-item-active' : ''}>
                           <Link to="/help" className="flex items-center gap-2">
@@ -451,6 +462,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild className={isActiveRoute('/contact') ? 'menu-item-active' : ''}>
                           <Link to="/contact" className="flex items-center gap-2">

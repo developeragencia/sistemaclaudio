@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -58,7 +57,6 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (isAuthenticated) {
-    // Modificando para verificar se o usuário é admin e redirecionar corretamente
     const { user } = useAuth();
     
     if (user?.role === 'admin') {
@@ -137,54 +135,53 @@ function App() {
               {/* Rotas públicas */}
               <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
               
-              {/* Rotas protegidas */}
+              {/* Rotas protegidas - Dashboard e Principal */}
               <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
               <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
               <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
-              <Route path="/credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-              <Route path="/reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
               
-              {/* Novas rotas para Módulos Principais */}
+              {/* Módulos Principais */}
               <Route path="/client-management" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+              <Route path="/commercial-proposals" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/tax-credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/advanced-calculator" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/irrf-calculations" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/irrf-recovery" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/credit-identification" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+              <Route path="/data-import" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/detailed-reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/tax-compensation" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/interactive-dashboard" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/retention-receipts" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/fiscal-reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-              <Route path="/commercial-proposals" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+              <Route path="/monetary-correction" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               <Route path="/audit-management" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+              <Route path="/tax-dossiers" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
               
-              {/* Rotas administrativas - Principal */}
-              <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              {/* Rotas administrativas - Módulos Principais */}
+              {/* Segurança & Auditoria */}
               <Route path="/users" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              {/* Rotas administrativas - Segurança & Auditoria */}
               <Route path="/security" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/access-control" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/two-factor" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/alerts" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/logs" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              
+              {/* Configurações & Integrações */}
+              <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
               <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
               
-              {/* Rotas administrativas - Operacional */}
-              <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-              
-              {/* Rotas administrativas - Site e Conteúdo */}
+              {/* Site e Conteúdo */}
               <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+              <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               
-              {/* Rotas administrativas - Suporte */}
+              {/* Suporte */}
               <Route path="/support-tickets" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/help" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
               <Route path="/contact" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
