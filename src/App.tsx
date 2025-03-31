@@ -61,7 +61,13 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    const { user } = useAuth();
+    
+    if (user?.role === 'admin') {
+      return <Navigate to="/admin-dashboard" replace />;
+    } else {
+      return <Navigate to="/dashboard" replace />;
+    }
   }
 
   return <>{children}</>;
@@ -136,7 +142,6 @@ function App() {
                   <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
                   
                   <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-                  
                   <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
                   <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
                   <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
