@@ -20,6 +20,7 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover'],
+          api: ['axios']
         },
       },
     },
@@ -28,4 +29,7 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  optimizeDeps: {
+    include: ['axios']
+  }
 });
