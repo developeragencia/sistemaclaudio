@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Sidebar, 
@@ -38,7 +39,17 @@ import {
   FileEdit,
   HeartHandshake,
   HelpCircle,
-  Phone
+  Phone,
+  ArrowLeftRight,
+  LayoutDashboard,
+  ClipboardCheck,
+  ListChecks,
+  Search,
+  Scan,
+  ArrowUp,
+  Receipt,
+  Eye,
+  FileCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -150,6 +161,131 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                       <Link to="/audit" className="flex items-center gap-2">
                         <FileSearch size={18} />
                         <span>Auditoria</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {/* Novo grupo de Módulos Principais */}
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-sm font-medium text-gray-400">Módulos Principais</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/client-management') ? 'menu-item-active' : ''}>
+                      <Link to="/client-management" className="flex items-center gap-2">
+                        <Users size={18} />
+                        <span>Gestão de Clientes</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/tax-credits') ? 'menu-item-active' : ''}>
+                      <Link to="/tax-credits" className="flex items-center gap-2">
+                        <FileCheck size={18} />
+                        <span>Créditos Tributários</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/advanced-calculator') ? 'menu-item-active' : ''}>
+                      <Link to="/advanced-calculator" className="flex items-center gap-2">
+                        <Calculator size={18} />
+                        <span>Calculadora Avançada</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/irrf-calculations') ? 'menu-item-active' : ''}>
+                      <Link to="/irrf-calculations" className="flex items-center gap-2">
+                        <Receipt size={18} />
+                        <span>Cálculos IRRF</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/irrf-recovery') ? 'menu-item-active' : ''}>
+                      <Link to="/irrf-recovery" className="flex items-center gap-2">
+                        <ArrowUp size={18} />
+                        <span>Recuperação IRRF/PJ</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/credit-identification') ? 'menu-item-active' : ''}>
+                      <Link to="/credit-identification" className="flex items-center gap-2">
+                        <Eye size={18} />
+                        <span>Identificação de Créditos</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/detailed-reports') ? 'menu-item-active' : ''}>
+                      <Link to="/detailed-reports" className="flex items-center gap-2">
+                        <ListChecks size={18} />
+                        <span>Relatórios Detalhados</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/tax-compensation') ? 'menu-item-active' : ''}>
+                      <Link to="/tax-compensation" className="flex items-center gap-2">
+                        <ArrowLeftRight size={18} />
+                        <span>Compensação Tributária</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/interactive-dashboard') ? 'menu-item-active' : ''}>
+                      <Link to="/interactive-dashboard" className="flex items-center gap-2">
+                        <LayoutDashboard size={18} />
+                        <span>Dashboard Interativo</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/retention-receipts') ? 'menu-item-active' : ''}>
+                      <Link to="/retention-receipts" className="flex items-center gap-2">
+                        <ClipboardCheck size={18} />
+                        <span>Comprovantes de Retenção</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/fiscal-reports') ? 'menu-item-active' : ''}>
+                      <Link to="/fiscal-reports" className="flex items-center gap-2">
+                        <FileBarChart size={18} />
+                        <span>Relatórios Fiscais</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/commercial-proposals') ? 'menu-item-active' : ''}>
+                      <Link to="/commercial-proposals" className="flex items-center gap-2">
+                        <FileEdit size={18} />
+                        <span>Propostas Comerciais</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActiveRoute('/audit-management') ? 'menu-item-active' : ''}>
+                      <Link to="/audit-management" className="flex items-center gap-2">
+                        <Scan size={18} />
+                        <span>Gestão de Auditorias</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

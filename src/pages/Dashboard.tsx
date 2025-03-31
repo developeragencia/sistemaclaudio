@@ -1,5 +1,23 @@
+
 import React from 'react';
-import { BarChart3, Calculator, Users, FileText, ArrowUpRight } from 'lucide-react';
+import { 
+  BarChart3, 
+  Calculator, 
+  Users, 
+  FileText, 
+  ArrowUpRight, 
+  Search, 
+  ListChecks, 
+  ArrowLeftRight, 
+  LayoutDashboard, 
+  ClipboardCheck, 
+  FileEdit, 
+  Scan,
+  Eye,
+  Receipt,
+  ArrowUp,
+  FileCheck
+} from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
 import RecentActivities, { Activity } from '@/components/dashboard/RecentActivities';
 import ClientsList from '@/components/dashboard/ClientsList';
@@ -26,7 +44,7 @@ import {
   HardDrive, 
   Network, 
   Globe, 
-  FileEdit, 
+  FileEdit as FileEditIcon, 
   HeartHandshake, 
   HelpCircle,
   Phone,
