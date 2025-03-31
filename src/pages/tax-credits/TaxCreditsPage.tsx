@@ -1,177 +1,215 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DataTable } from "@/components/ui/data-table";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { DatePickerWithRange } from "@/components/ui/date-picker-with-range";
+import { addDays } from "date-fns";
 
-// Tipos
-interface Credit {
-  id: string;
-  type: string;
-  description: string;
-  value: number;
-  status: "pending" | "approved" | "rejected";
-  date: string;
-}
+const credits = [
+  {
+    id: 1,
+    client: "Empresa ABC Ltda",
+    type: "IRRF",
+    value: "R$ 25.000,00",
+    status: "Identificado",
+    period: "2024-01",
+    expirationDate: "2029-01",
+  },
+  {
+    id: 2,
+    client: "XYZ Comércio e Serviços",
+    type: "PIS/COFINS",
+    value: "R$ 35.000,00",
+    status: "Em Análise",
+    period: "2024-01",
+    expirationDate: "2029-01",
+  },
+];
+
+const statusColors = {
+  "Identificado": "bg-green-100 text-green-800",
+  "Em Análise": "bg-yellow-100 text-yellow-800",
+  "Compensado": "bg-blue-100 text-blue-800",
+  "Expirado": "bg-red-100 text-red-800",
+};
 
 export function TaxCreditsPage() {
-  const [credits] = useState<Credit[]>([
-    {
-      id: "1",
-      type: "ICMS",
-      description: "Crédito de ICMS sobre insumos",
-      value: 15000.00,
-      status: "approved",
-      date: "2024-03-15",
-    },
-    {
-      id: "2",
-      type: "PIS/COFINS",
-      description: "Crédito de PIS/COFINS sobre despesas",
-      value: 8500.00,
-      status: "pending",
-      date: "2024-03-14",
-    },
-    {
-      id: "3",
-      type: "IPI",
-      description: "Crédito de IPI sobre matéria-prima",
-      value: 12000.00,
-      status: "approved",
-      date: "2024-03-13",
-    },
-  ]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: addDays(new Date(), 30),
+  });
 
-  const columns = [
-    {
-      accessorKey: "type",
-      header: "Tipo",
-    },
-    {
-      accessorKey: "description",
-      header: "Descrição",
-    },
-    {
-      accessorKey: "value",
-      header: "Valor",
-      cell: ({ row }: any) => {
-        return `R$ ${row.original.value.toFixed(2)}`;
-      },
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }: any) => {
-        const status = row.original.status;
-        const styles = {
-          approved: "bg-green-100 text-green-800",
-          pending: "bg-yellow-100 text-yellow-800",
-          rejected: "bg-red-100 text-red-800",
-        };
-        const labels = {
-          approved: "Aprovado",
-          pending: "Pendente",
-          rejected: "Rejeitado",
-        };
-        return (
-          <span className={`px-2 py-1 rounded-full text-sm ${styles[status]}`}>
-            {labels[status]}
-          </span>
-        );
-      },
-    },
-    {
-      accessorKey: "date",
-      header: "Data",
-      cell: ({ row }: any) => {
-        return new Date(row.original.date).toLocaleDateString('pt-BR');
-      },
-    },
-  ];
+  const filteredCredits = credits.filter(
+    (credit) =>
+      credit.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      credit.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      credit.value.includes(searchTerm)
+  );
+
+  const totalCredits = credits.reduce(
+    (acc, credit) => acc + parseFloat(credit.value.replace("R$ ", "").replace(".", "").replace(",", ".")),
+    0
+  );
+
+  const pendingCredits = credits
+    .filter((credit) => credit.status === "Em Análise")
+    .reduce(
+      (acc, credit) => acc + parseFloat(credit.value.replace("R$ ", "").replace(".", "").replace(",", ".")),
+      0
+    );
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Créditos Tributários</h2>
-        <div className="flex items-center space-x-2">
-          <Button>Novo Crédito</Button>
-          <Button variant="outline">Exportar Relatório</Button>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Créditos Tributários</h1>
+          <p className="text-muted-foreground">
+            Gerencie e acompanhe os créditos tributários identificados
+          </p>
         </div>
+        <Button>Novo Crédito</Button>
       </div>
 
-      <Tabs defaultValue="all" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="pending">Pendentes</TabsTrigger>
-          <TabsTrigger value="approved">Aprovados</TabsTrigger>
-          <TabsTrigger value="rejected">Rejeitados</TabsTrigger>
-        </TabsList>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total de Créditos
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(totalCredits)}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +20.1% em relação ao mês anterior
+            </p>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="all" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Todos os Créditos</CardTitle>
-              <CardDescription>
-                Visualize todos os créditos tributários identificados
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable columns={columns} data={credits} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Créditos Pendentes
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(pendingCredits)}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              5 créditos em análise
+            </p>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="pending" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Créditos Pendentes</CardTitle>
-              <CardDescription>
-                Créditos que aguardam análise ou aprovação
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable 
-                columns={columns} 
-                data={credits.filter(credit => credit.status === 'pending')} 
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Taxa de Aprovação
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">92%</div>
+            <p className="text-xs text-muted-foreground">
+              +2.5% em relação ao mês anterior
+            </p>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="approved" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Créditos Aprovados</CardTitle>
-              <CardDescription>
-                Créditos aprovados e disponíveis para utilização
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable 
-                columns={columns} 
-                data={credits.filter(credit => credit.status === 'approved')} 
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Tempo Médio de Análise
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">15 dias</div>
+            <p className="text-xs text-muted-foreground">
+              -2 dias em relação ao mês anterior
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
-        <TabsContent value="rejected" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Créditos Rejeitados</CardTitle>
-              <CardDescription>
-                Créditos que não foram aprovados
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable 
-                columns={columns} 
-                data={credits.filter(credit => credit.status === 'rejected')} 
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      <div className="flex gap-4 mb-4">
+        <Input
+          placeholder="Buscar por cliente, tipo ou valor..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <DatePickerWithRange date={date} setDate={setDate} />
+        <Button variant="outline">Exportar</Button>
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Valor</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Período</TableHead>
+            <TableHead>Vencimento</TableHead>
+            <TableHead>Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredCredits.map((credit) => (
+            <TableRow key={credit.id}>
+              <TableCell>{credit.client}</TableCell>
+              <TableCell>{credit.type}</TableCell>
+              <TableCell>{credit.value}</TableCell>
+              <TableCell>
+                <Badge
+                  variant="secondary"
+                  className={statusColors[credit.status as keyof typeof statusColors]}
+                >
+                  {credit.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{credit.period}</TableCell>
+              <TableCell>{credit.expirationDate}</TableCell>
+              <TableCell>
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm">
+                    Visualizar
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    Editar
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-red-600">
+                    Excluir
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 } 

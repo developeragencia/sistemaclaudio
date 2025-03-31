@@ -9,24 +9,44 @@ export function Nav({ className, ...props }: NavProps) {
 
   const routes = [
     {
-      href: "/app/home",
+      href: "/",
       label: "Home",
     },
     {
-      href: "/app/tax-credits",
+      href: "/tax-credits",
       label: "Créditos Tributários",
     },
     {
-      href: "/app/tax-rules",
-      label: "Regras Tributárias",
-    },
-    {
-      href: "/app/calculator/advanced",
+      href: "/calculator",
       label: "Calculadora Avançada",
     },
     {
-      href: "/app/calculator/simple",
-      label: "Calculadora Simples",
+      href: "/irrf-calculator",
+      label: "Cálculos IRRF",
+    },
+    {
+      href: "/irrf-recovery",
+      label: "Recuperação IRRF/PJ",
+    },
+    {
+      href: "/credit-identification",
+      label: "Identificação de Créditos",
+    },
+    {
+      href: "/payment-audit",
+      label: "Auditoria de Pagamentos",
+    },
+    {
+      href: "/tax-rules",
+      label: "Regras Tributárias",
+    },
+    {
+      href: "/tax-rules/history",
+      label: "Histórico de Regras",
+    },
+    {
+      href: "/tax-rules/settings",
+      label: "Configurações de Regras",
     },
   ];
 
@@ -41,8 +61,7 @@ export function Nav({ className, ...props }: NavProps) {
           to={route.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            location.pathname === route.href ||
-            (route.href !== "/app/home" && location.pathname.startsWith(route.href))
+            location.pathname === route.href
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start"

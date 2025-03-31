@@ -65,7 +65,7 @@ const statusColors = {
   inactive: "bg-gray-100 text-gray-800",
 };
 
-export function TaxRulesPage() {
+export default function TaxRulesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
