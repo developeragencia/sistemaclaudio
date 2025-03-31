@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -21,26 +21,16 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(email, password);
-      
-      if (success) {
-        toast({
-          title: "Login realizado com sucesso",
-          description: "Bem-vindo ao Sistema Cláudio Figueiredo",
-        });
-        
-        navigate('/app/home');
-      } else {
-        toast({
-          title: "Falha no login",
-          description: "Email ou senha incorretos",
-          variant: "destructive",
-        });
-      }
+      await signIn(email, password);
+      toast({
+        title: "Login realizado com sucesso",
+        description: "Você será redirecionado para o dashboard",
+      });
+      navigate('/app/home');
     } catch (error) {
       toast({
         title: "Erro ao fazer login",
-        description: "Ocorreu um erro inesperado",
+        description: "Verifique suas credenciais e tente novamente",
         variant: "destructive",
       });
     } finally {
