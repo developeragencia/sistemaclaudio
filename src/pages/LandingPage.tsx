@@ -49,7 +49,10 @@ const LandingPage = () => {
       </div>
       
       <footer className="absolute bottom-0 w-full py-4 text-center text-gray-500 text-xs">
-        © {new Date().getFullYear()} Cláudio Figueiredo Advogados Associados. Todos os direitos reservados.
+        <p>
+          Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
+        </p>
+        <p className="mt-1">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
       </footer>
     </div>
   );

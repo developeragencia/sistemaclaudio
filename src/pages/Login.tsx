@@ -127,6 +127,13 @@ const Login = () => {
           </div>
           <p className="text-xs mt-2 text-gray-600">Senha: password</p>
         </div>
+        
+        <footer className="mt-8 text-center text-xs text-gray-500">
+          <p>
+            Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
+          </p>
+          <p className="mt-1">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
+        </footer>
       </div>
     </div>
   );
