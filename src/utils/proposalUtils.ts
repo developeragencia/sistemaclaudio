@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Clock, Filter, CheckCircle2, XCircle, FileCheck } from 'lucide-react';
 import { ProposalStatus } from '@/types/proposal';
 
