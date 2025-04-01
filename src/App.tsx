@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +20,15 @@ const CNPJIntegration = lazy(() => import("./pages/CNPJ/Integration"));
 const AuditPage = lazy(() => import("./pages/Audit/AuditPage"));
 const TaxRatesPage = lazy(() => import("./pages/TaxRates/TaxRatesPage"));
 const UnderDevelopment = lazy(() => import("./pages/UnderDevelopment"));
+
+// Admin pages
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const UsersPage = lazy(() => import("./pages/admin/Users"));
+const SecurityPage = lazy(() => import("./pages/admin/Security"));
+const AccessControlPage = lazy(() => import("./pages/admin/AccessControl"));
+const TwoFactorPage = lazy(() => import("./pages/admin/TwoFactor"));
+const AlertsPage = lazy(() => import("./pages/admin/Alerts"));
+const LogsPage = lazy(() => import("./pages/admin/Logs"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -157,14 +165,15 @@ function App() {
                   <Route path="/audit-management" element={<AuthenticatedLayout><UnderDevelopment pageName="Gestão de Auditoria" /></AuthenticatedLayout>} />
                   <Route path="/tax-dossiers" element={<AuthenticatedLayout><UnderDevelopment pageName="Dossiês Tributários" /></AuthenticatedLayout>} />
                   
-                  <Route path="/users" element={<AdminLayout><UnderDevelopment pageName="Usuários" /></AdminLayout>} />
-                  <Route path="/security" element={<AdminLayout><UnderDevelopment pageName="Segurança" /></AdminLayout>} />
-                  <Route path="/access-control" element={<AdminLayout><UnderDevelopment pageName="Controle de Acesso" /></AdminLayout>} />
-                  <Route path="/two-factor" element={<AdminLayout><UnderDevelopment pageName="Autenticação 2FA" /></AdminLayout>} />
-                  <Route path="/alerts" element={<AdminLayout><UnderDevelopment pageName="Alertas" /></AdminLayout>} />
-                  <Route path="/logs" element={<AdminLayout><UnderDevelopment pageName="Logs" /></AdminLayout>} />
+                  {/* Admin pages */}
+                  <Route path="/users" element={<AdminLayout><UsersPage /></AdminLayout>} />
+                  <Route path="/security" element={<AdminLayout><SecurityPage /></AdminLayout>} />
+                  <Route path="/access-control" element={<AdminLayout><AccessControlPage /></AdminLayout>} />
+                  <Route path="/two-factor" element={<AdminLayout><TwoFactorPage /></AdminLayout>} />
+                  <Route path="/alerts" element={<AdminLayout><AlertsPage /></AdminLayout>} />
+                  <Route path="/logs" element={<AdminLayout><LogsPage /></AdminLayout>} />
                   
-                  <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment pageName="Dashboard Admin" /></AdminLayout>} />
+                  <Route path="/admin-dashboard" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
                   <Route path="/settings" element={<AdminLayout><UnderDevelopment pageName="Configurações" /></AdminLayout>} />
                   <Route path="/backup" element={<AdminLayout><UnderDevelopment pageName="Backup" /></AdminLayout>} />
                   <Route path="/workflows" element={<AdminLayout><UnderDevelopment pageName="Fluxos de Trabalho" /></AdminLayout>} />
