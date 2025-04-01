@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => ({
       },
       include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
       exclude: ["node_modules", "dist"],
-      references: []
+      references: [] // Remove any external references to fix TS6306 and TS6310 errors
     })
   }
 }));
