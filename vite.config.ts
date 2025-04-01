@@ -66,7 +66,7 @@ export default defineConfig(({ mode }) => ({
       },
       include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
       exclude: ["node_modules", "dist"],
-      references: [] // Remove any external references
+      references: [{ path: "./tsconfig.node.custom.json" }]
     })
   }
 }));
