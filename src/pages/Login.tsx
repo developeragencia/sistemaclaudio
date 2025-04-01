@@ -1,150 +1,109 @@
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import Logo from '@/components/Logo';
-import { ArrowLeft } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { toast } from '@/components/ui/use-toast';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+const formSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+});
+
+const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { login } = useAuth();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const success = await login(email, password);
-      
-      if (success) {
-        toast({
-          title: "Login realizado com sucesso",
-          description: "Bem-vindo ao Sistema Cláudio Figueiredo",
-        });
-        
-        if (email === 'admin@sistemaclaudiofigueiredo.com') {
-          navigate('/admin-dashboard');
-        } else {
-          navigate('/dashboard');
-        }
-      } else {
-        toast({
-          title: "Falha no login",
-          description: "Email ou senha incorretos",
-          variant: "destructive",
-        });
-      }
+      await login(values.email, values.password);
+      toast({
+        title: 'Login bem-sucedido',
+        description: 'Você foi autenticado com sucesso.',
+      });
     } catch (error) {
       toast({
-        title: "Erro ao fazer login",
-        description: "Ocorreu um erro inesperado",
-        variant: "destructive",
+        variant: 'destructive',
+        title: 'Falha no login',
+        description: 'Email ou senha incorretos. Tente novamente.',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-white bg-geometric">
-      <div className="grid-pattern"></div>
-      
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="mb-8 text-center">
-          <Link to="/">
-            <Logo animated size="lg" className="mx-auto" />
-          </Link>
-          <p className="text-gray-600 mt-4 animate-fade-in animate-delay-2">
-            Sistema para Recuperação de Créditos Tributários
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            Entrar na sua conta
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Sistema de Recuperação de Créditos
           </p>
-        </div>
-
-        <Card className="w-full backdrop-blur-sm bg-white/95 animate-fade-in animate-delay-1 shadow-xl border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-center">Acesse sua conta</CardTitle>
-            <CardDescription className="text-center">
-              Entre com suas credenciais para acessar o sistema
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="transition-all duration-300 focus:ring-2 focus:ring-gray-400"
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Senha</Label>
-                  <a href="#" className="text-sm text-primary hover:underline transition-colors">
-                    Esqueceu a senha?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="transition-all duration-300 focus:ring-2 focus:ring-gray-400"
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-4">
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 transition-all duration-300 transform hover:scale-[1.02]" 
-                disabled={isLoading}
-              >
-                {isLoading ? "Entrando..." : "Entrar"}
-              </Button>
-              <Button 
-                type="button" 
-                variant="ghost" 
-                size="sm" 
-                className="flex items-center gap-1" 
-                asChild
-              >
-                <Link to="/">
-                  <ArrowLeft size={16} />
-                  Voltar para Home
-                </Link>
-              </Button>
-            </CardFooter>
-          </form>
-        </Card>
-
-        <div className="mt-6 text-center animate-fade-in animate-delay-3">
-          <p className="text-sm text-gray-600">
-            Para acesso de teste, use:
-          </p>
-          <p className="text-xs mt-2 text-gray-600">Admin: admin@sistemaclaudiofigueiredo.com</p>
-          <p className="text-xs text-gray-600">Senha: admin123</p>
         </div>
         
-        <footer className="mt-8 text-center text-xs text-gray-500">
-          <p>
-            Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Alex Developer</a>
-          </p>
-          <p className="mt-1">© 2025 Sistemas Cláudio Figueiredo. Todos os direitos reservados.</p>
-        </footer>
+        <Card>
+          <CardHeader>
+            <CardTitle>Login</CardTitle>
+            <CardDescription>
+              Digite suas credenciais para acessar o sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="seu@email.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Senha</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Entrar
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <p className="text-sm text-gray-500">
+              © 2023 Sistema de Recuperação de Créditos
+            </p>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
