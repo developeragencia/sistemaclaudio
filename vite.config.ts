@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['axios']
   },
-  // Override references to tsconfig.node.json
+  // Override references to tsconfig files with inline configuration
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
@@ -54,7 +54,9 @@ export default defineConfig(({ mode }) => ({
         resolveJsonModule: true,
         isolatedModules: true,
         noEmit: true,
-        jsx: "react-jsx"
+        jsx: "react-jsx",
+        // Add composite setting to satisfy the requirements
+        composite: true
       }
     }
   }
