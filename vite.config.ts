@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['axios']
   },
-  // Complete inline TypeScript configuration to avoid references to external tsconfig files
+  // Self-contained TypeScript configuration with no references to external files
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
@@ -59,12 +59,10 @@ export default defineConfig(({ mode }) => ({
         paths: {
           "@/*": ["./src/*"]
         },
-        // Add composite setting to fix the reference project error
         composite: true
       },
       include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
       exclude: ["node_modules", "dist"],
-      // Explicitly empty the references array to prevent any reference lookups
       references: []
     }
   }
