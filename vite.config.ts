@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['axios']
   },
-  // Complete standalone TypeScript configuration without external references
+  // Self-contained TypeScript configuration without external references
   esbuild: {
     tsconfigRaw: JSON.stringify({
       compilerOptions: {
