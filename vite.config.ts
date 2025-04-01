@@ -55,9 +55,16 @@ export default defineConfig(({ mode }) => ({
         isolatedModules: true,
         noEmit: true,
         jsx: "react-jsx",
+        baseUrl: ".",
+        paths: {
+          "@/*": ["./src/*"]
+        },
+        // Add composite setting to fix the reference project error
         composite: true
       },
-      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
+      exclude: ["node_modules", "dist"],
+      // Remove references to external tsconfig files
       references: []
     }
   }
