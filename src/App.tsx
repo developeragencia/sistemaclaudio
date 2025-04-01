@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -24,7 +25,11 @@ const UnderDevelopment = lazy(() => import("./pages/UnderDevelopment"));
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const UsersPage = lazy(() => import("./pages/admin/Users"));
-const SecurityPage = lazy(() => import("./pages/admin/Security"));
+const SecuritySettings = lazy(() => import("./pages/admin/SecuritySettings"));
+const TaxCalculator = lazy(() => import("./pages/admin/TaxCalculator"));
+const ClientsManagement = lazy(() => import("./pages/admin/ClientsManagement"));
+const CommercialProposals = lazy(() => import("./pages/admin/CommercialProposals"));
+const CreditIdentification = lazy(() => import("./pages/admin/CreditIdentification"));
 const AccessControlPage = lazy(() => import("./pages/admin/AccessControl"));
 const TwoFactorPage = lazy(() => import("./pages/admin/TwoFactor"));
 const AlertsPage = lazy(() => import("./pages/admin/Alerts"));
@@ -148,13 +153,24 @@ function App() {
                   <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
                   <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
                   
-                  <Route path="/client-management" element={<AuthenticatedLayout><UnderDevelopment pageName="Gestão de Clientes" /></AuthenticatedLayout>} />
-                  <Route path="/commercial-proposals" element={<AuthenticatedLayout><UnderDevelopment pageName="Propostas Comerciais" /></AuthenticatedLayout>} />
-                  <Route path="/tax-credits" element={<AuthenticatedLayout><UnderDevelopment pageName="Créditos Tributários" /></AuthenticatedLayout>} />
-                  <Route path="/advanced-calculator" element={<AuthenticatedLayout><UnderDevelopment pageName="Calculadora Avançada" /></AuthenticatedLayout>} />
+                  {/* Rotas de gerenciamento de clientes */}
+                  <Route path="/client-management" element={<AdminLayout><ClientsManagement /></AdminLayout>} />
+                  <Route path="/client-detail/:id" element={<AdminLayout><UnderDevelopment pageName="Detalhes do Cliente" /></AdminLayout>} />
+                  <Route path="/client-edit/:id" element={<AdminLayout><UnderDevelopment pageName="Editar Cliente" /></AdminLayout>} />
+                  
+                  {/* Rotas de propostas comerciais */}
+                  <Route path="/commercial-proposals" element={<AdminLayout><CommercialProposals /></AdminLayout>} />
+                  <Route path="/proposal-detail/:id" element={<AdminLayout><UnderDevelopment pageName="Detalhes da Proposta" /></AdminLayout>} />
+                  
+                  {/* Rotas de identificação de créditos */}
+                  <Route path="/credit-identification" element={<AdminLayout><CreditIdentification /></AdminLayout>} />
+                  
+                  {/* Rotas de calculadora avançada */}
+                  <Route path="/advanced-calculator" element={<AdminLayout><TaxCalculator /></AdminLayout>} />
+                  
+                  {/* Outras rotas de módulos */}
                   <Route path="/irrf-calculations" element={<AuthenticatedLayout><UnderDevelopment pageName="Cálculos IRRF" /></AuthenticatedLayout>} />
                   <Route path="/irrf-recovery" element={<AuthenticatedLayout><UnderDevelopment pageName="Recuperação IRRF" /></AuthenticatedLayout>} />
-                  <Route path="/credit-identification" element={<AuthenticatedLayout><UnderDevelopment pageName="Identificação de Créditos" /></AuthenticatedLayout>} />
                   <Route path="/data-import" element={<AuthenticatedLayout><UnderDevelopment pageName="Importação de Dados" /></AuthenticatedLayout>} />
                   <Route path="/detailed-reports" element={<AuthenticatedLayout><UnderDevelopment pageName="Relatórios Detalhados" /></AuthenticatedLayout>} />
                   <Route path="/tax-compensation" element={<AuthenticatedLayout><UnderDevelopment pageName="Compensação Tributária" /></AuthenticatedLayout>} />
@@ -167,7 +183,7 @@ function App() {
                   
                   {/* Admin pages */}
                   <Route path="/users" element={<AdminLayout><UsersPage /></AdminLayout>} />
-                  <Route path="/security" element={<AdminLayout><SecurityPage /></AdminLayout>} />
+                  <Route path="/security" element={<AdminLayout><SecuritySettings /></AdminLayout>} />
                   <Route path="/access-control" element={<AdminLayout><AccessControlPage /></AdminLayout>} />
                   <Route path="/two-factor" element={<AdminLayout><TwoFactorPage /></AdminLayout>} />
                   <Route path="/alerts" element={<AdminLayout><AlertsPage /></AdminLayout>} />
