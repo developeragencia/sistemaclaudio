@@ -53,7 +53,10 @@ export default defineConfig(({ mode }) => ({
         moduleResolution: "Node",
         resolveJsonModule: true,
         isolatedModules: true,
-        noEmit: true,
+        noEmit: false,
+        declaration: true,
+        declarationMap: true,
+        sourceMap: true,
         jsx: "react-jsx",
         baseUrl: ".",
         paths: {
@@ -63,7 +66,7 @@ export default defineConfig(({ mode }) => ({
       },
       include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
       exclude: ["node_modules", "dist"],
-      references: [] // Remove any external references to fix TS6306 and TS6310 errors
+      references: [] // Remove any external references
     })
   }
 }));
