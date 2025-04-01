@@ -21,7 +21,6 @@ const formSchema = z.object({
 });
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
