@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
+import { ArrowLeft } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,8 +31,6 @@ const Login = () => {
           description: "Bem-vindo ao Sistema Cláudio Figueiredo",
         });
         
-        // Corrigindo a navegação - verificar se o usuário é admin
-        // e redirecionar para o painel administrativo
         if (email === 'admin@sistemaclaudiofigueiredo.com') {
           navigate('/admin-dashboard');
         } else {
@@ -61,7 +60,9 @@ const Login = () => {
       
       <div className="w-full max-w-md animate-fade-in">
         <div className="mb-8 text-center">
-          <Logo animated size="lg" className="mx-auto" />
+          <Link to="/">
+            <Logo animated size="lg" className="mx-auto" />
+          </Link>
           <p className="text-gray-600 mt-4 animate-fade-in animate-delay-2">
             Sistema para Recuperação de Créditos Tributários
           </p>
@@ -106,13 +107,25 @@ const Login = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col gap-4">
               <Button 
                 type="submit" 
                 className="w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 transition-all duration-300 transform hover:scale-[1.02]" 
                 disabled={isLoading}
               >
                 {isLoading ? "Entrando..." : "Entrar"}
+              </Button>
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="flex items-center gap-1" 
+                asChild
+              >
+                <Link to="/">
+                  <ArrowLeft size={16} />
+                  Voltar para Home
+                </Link>
               </Button>
             </CardFooter>
           </form>

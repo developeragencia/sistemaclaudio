@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Building2 } from 'lucide-react';
+import { Home, Building2, FileText } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   SidebarGroup,
@@ -33,10 +33,19 @@ const SidebarMainNavigation: React.FC = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className={isActiveRoute('/client-management') ? 'menu-item-active' : ''}>
-              <Link to="/client-management" className="flex items-center gap-2">
+            <SidebarMenuButton asChild className={isActiveRoute('/clients') ? 'menu-item-active' : ''}>
+              <Link to="/clients" className="flex items-center gap-2">
                 <Building2 size={18} />
-                <span>Controle de Clientes</span>
+                <span>Clientes</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className={isActiveRoute('/proposals') ? 'menu-item-active' : ''}>
+              <Link to="/proposals" className="flex items-center gap-2">
+                <FileText size={18} />
+                <span>Propostas</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

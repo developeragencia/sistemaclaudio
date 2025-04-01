@@ -1,3 +1,4 @@
+
 {
   "compilerOptions": {
     "target": "es2020",
@@ -12,7 +13,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

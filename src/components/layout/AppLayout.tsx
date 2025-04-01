@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Sidebar, 
   SidebarHeader,
@@ -38,7 +39,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <Sidebar variant="sidebar" collapsible="icon" className="border-r">
           <SidebarHeader className="p-4">
             <div className="flex items-center justify-center">
-              <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} textOnly={true} />
+              <Link to="/">
+                <Logo size={isMobile ? "sm" : "md"} withSubtitle={!isMobile} textOnly={true} />
+              </Link>
             </div>
           </SidebarHeader>
 

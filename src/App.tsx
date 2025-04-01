@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,6 +20,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const CNPJIntegration = lazy(() => import("./pages/CNPJ/Integration"));
 const AuditPage = lazy(() => import("./pages/Audit/AuditPage"));
 const TaxRatesPage = lazy(() => import("./pages/TaxRates/TaxRatesPage"));
+const UnderDevelopment = lazy(() => import("./pages/UnderDevelopment"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -117,14 +119,6 @@ const LoadingFallback = () => (
   </div>
 );
 
-const UnderDevelopment = () => (
-  <div className="flex flex-col items-center justify-center p-8">
-    <h1 className="text-2xl font-bold mb-4">Página em Desenvolvimento</h1>
-    <p className="text-muted-foreground mb-6">Esta funcionalidade está sendo implementada e estará disponível em breve.</p>
-    <img src="/placeholder.svg" alt="Em desenvolvimento" className="w-64 h-64 opacity-50" loading="lazy" />
-  </div>
-);
-
 function App() {
   return (
     <ErrorBoundary>
@@ -146,45 +140,45 @@ function App() {
                   <Route path="/proposals" element={<AuthenticatedLayout><Proposals /></AuthenticatedLayout>} />
                   <Route path="/audit" element={<AuthenticatedLayout><AuditPage /></AuthenticatedLayout>} />
                   
-                  <Route path="/client-management" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/commercial-proposals" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/tax-credits" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/advanced-calculator" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/irrf-calculations" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/irrf-recovery" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/credit-identification" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/data-import" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/detailed-reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/tax-compensation" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/interactive-dashboard" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/retention-receipts" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/fiscal-reports" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/monetary-correction" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/audit-management" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
-                  <Route path="/tax-dossiers" element={<AuthenticatedLayout><UnderDevelopment /></AuthenticatedLayout>} />
+                  <Route path="/client-management" element={<AuthenticatedLayout><UnderDevelopment pageName="Gestão de Clientes" /></AuthenticatedLayout>} />
+                  <Route path="/commercial-proposals" element={<AuthenticatedLayout><UnderDevelopment pageName="Propostas Comerciais" /></AuthenticatedLayout>} />
+                  <Route path="/tax-credits" element={<AuthenticatedLayout><UnderDevelopment pageName="Créditos Tributários" /></AuthenticatedLayout>} />
+                  <Route path="/advanced-calculator" element={<AuthenticatedLayout><UnderDevelopment pageName="Calculadora Avançada" /></AuthenticatedLayout>} />
+                  <Route path="/irrf-calculations" element={<AuthenticatedLayout><UnderDevelopment pageName="Cálculos IRRF" /></AuthenticatedLayout>} />
+                  <Route path="/irrf-recovery" element={<AuthenticatedLayout><UnderDevelopment pageName="Recuperação IRRF" /></AuthenticatedLayout>} />
+                  <Route path="/credit-identification" element={<AuthenticatedLayout><UnderDevelopment pageName="Identificação de Créditos" /></AuthenticatedLayout>} />
+                  <Route path="/data-import" element={<AuthenticatedLayout><UnderDevelopment pageName="Importação de Dados" /></AuthenticatedLayout>} />
+                  <Route path="/detailed-reports" element={<AuthenticatedLayout><UnderDevelopment pageName="Relatórios Detalhados" /></AuthenticatedLayout>} />
+                  <Route path="/tax-compensation" element={<AuthenticatedLayout><UnderDevelopment pageName="Compensação Tributária" /></AuthenticatedLayout>} />
+                  <Route path="/interactive-dashboard" element={<AuthenticatedLayout><UnderDevelopment pageName="Dashboard Interativo" /></AuthenticatedLayout>} />
+                  <Route path="/retention-receipts" element={<AuthenticatedLayout><UnderDevelopment pageName="Comprovantes de Retenção" /></AuthenticatedLayout>} />
+                  <Route path="/fiscal-reports" element={<AuthenticatedLayout><UnderDevelopment pageName="Relatórios Fiscais" /></AuthenticatedLayout>} />
+                  <Route path="/monetary-correction" element={<AuthenticatedLayout><UnderDevelopment pageName="Correção Monetária" /></AuthenticatedLayout>} />
+                  <Route path="/audit-management" element={<AuthenticatedLayout><UnderDevelopment pageName="Gestão de Auditoria" /></AuthenticatedLayout>} />
+                  <Route path="/tax-dossiers" element={<AuthenticatedLayout><UnderDevelopment pageName="Dossiês Tributários" /></AuthenticatedLayout>} />
                   
-                  <Route path="/users" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/security" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/access-control" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/two-factor" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/alerts" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/logs" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+                  <Route path="/users" element={<AdminLayout><UnderDevelopment pageName="Usuários" /></AdminLayout>} />
+                  <Route path="/security" element={<AdminLayout><UnderDevelopment pageName="Segurança" /></AdminLayout>} />
+                  <Route path="/access-control" element={<AdminLayout><UnderDevelopment pageName="Controle de Acesso" /></AdminLayout>} />
+                  <Route path="/two-factor" element={<AdminLayout><UnderDevelopment pageName="Autenticação 2FA" /></AdminLayout>} />
+                  <Route path="/alerts" element={<AdminLayout><UnderDevelopment pageName="Alertas" /></AdminLayout>} />
+                  <Route path="/logs" element={<AdminLayout><UnderDevelopment pageName="Logs" /></AdminLayout>} />
                   
-                  <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/settings" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/backup" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/workflows" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/integrations" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+                  <Route path="/admin-dashboard" element={<AdminLayout><UnderDevelopment pageName="Dashboard Admin" /></AdminLayout>} />
+                  <Route path="/settings" element={<AdminLayout><UnderDevelopment pageName="Configurações" /></AdminLayout>} />
+                  <Route path="/backup" element={<AdminLayout><UnderDevelopment pageName="Backup" /></AdminLayout>} />
+                  <Route path="/workflows" element={<AdminLayout><UnderDevelopment pageName="Fluxos de Trabalho" /></AdminLayout>} />
+                  <Route path="/integrations" element={<AdminLayout><UnderDevelopment pageName="Integrações" /></AdminLayout>} />
                   <Route path="/cnpj-integration" element={<AdminLayout><CNPJIntegration /></AdminLayout>} />
                   <Route path="/tax-rates" element={<AdminLayout><TaxRatesPage /></AdminLayout>} />
                   
-                  <Route path="/website" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/content" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+                  <Route path="/website" element={<AdminLayout><UnderDevelopment pageName="Website" /></AdminLayout>} />
+                  <Route path="/content" element={<AdminLayout><UnderDevelopment pageName="Conteúdo" /></AdminLayout>} />
+                  <Route path="/knowledge-base" element={<AdminLayout><UnderDevelopment pageName="Base de Conhecimento" /></AdminLayout>} />
                   
-                  <Route path="/support-tickets" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/help" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
-                  <Route path="/contact" element={<AdminLayout><UnderDevelopment /></AdminLayout>} />
+                  <Route path="/support-tickets" element={<AdminLayout><UnderDevelopment pageName="Tickets de Suporte" /></AdminLayout>} />
+                  <Route path="/help" element={<AdminLayout><UnderDevelopment pageName="Ajuda" /></AdminLayout>} />
+                  <Route path="/contact" element={<AdminLayout><UnderDevelopment pageName="Contato" /></AdminLayout>} />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>
