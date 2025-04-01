@@ -36,9 +36,9 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['axios']
   },
-  // Self-contained TypeScript configuration with no references to external files
+  // Complete standalone TypeScript configuration without external references
   esbuild: {
-    tsconfigRaw: {
+    tsconfigRaw: JSON.stringify({
       compilerOptions: {
         target: "esnext",
         useDefineForClassFields: true,
@@ -64,6 +64,6 @@ export default defineConfig(({ mode }) => ({
       include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vite.config.ts"],
       exclude: ["node_modules", "dist"],
       references: []
-    }
+    })
   }
 }));
