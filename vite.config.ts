@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['axios']
   },
-  // Override references to tsconfig files with inline configuration
+  // Complete inline TypeScript configuration to avoid references to external tsconfig files
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
@@ -55,9 +55,10 @@ export default defineConfig(({ mode }) => ({
         isolatedModules: true,
         noEmit: true,
         jsx: "react-jsx",
-        // Add composite setting to satisfy the requirements
         composite: true
-      }
+      },
+      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+      references: []
     }
   }
 }));
